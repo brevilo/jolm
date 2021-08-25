@@ -48,14 +48,14 @@
 		<jna.version>5.8.0</jna.version>
 		<jackson.version>2.11.1</jackson.version>
 
-		<maven.source.plugin.version>3.2.1</maven.source.plugin.version>
-		<maven.javadoc.plugin.version>3.3.0</maven.javadoc.plugin.version>
-		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-		<junit.jupiter.engine.version>5.7.2</junit.jupiter.engine.version>
 		<maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
 		<checkstyle.version>8.45.1</checkstyle.version>
+		<maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
+		<junit.jupiter.engine.version>5.7.2</junit.jupiter.engine.version>
 		<spotless.version>2.12.3</spotless.version>
 		<maven.release.plugin.version>3.0.0-M4</maven.release.plugin.version>
+		<maven.source.plugin.version>3.2.1</maven.source.plugin.version>
+		<maven.javadoc.plugin.version>3.3.0</maven.javadoc.plugin.version>
 		<maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
 
 		<maven.compiler.source>11</maven.compiler.source>
@@ -88,44 +88,6 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven.source.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven.javadoc.plugin.version}</version>
-				<configuration>
-					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
-					<destDir>docs</destDir>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven.surefire.plugin.version}</version>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<version>${maven.checkstyle.plugin.version}</version>
 				<dependencies>
@@ -152,6 +114,12 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire.plugin.version}</version>
 			</plugin>
 
 			<plugin>
@@ -185,6 +153,8 @@
 				<configuration>
 					<tagNameFormat>@{project.version}</tagNameFormat>
 					<scmCommentPrefix>[Maven]</scmCommentPrefix>
+					<useReleaseProfile>false</useReleaseProfile>
+					<releaseProfiles>release</releaseProfiles>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -192,9 +162,37 @@
 
 	<profiles>
 		<profile>
-			<id>sign</id>
+			<id>release</id>
 			<build>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven.source.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${maven.javadoc.plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
