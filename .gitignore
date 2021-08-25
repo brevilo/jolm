@@ -1,0 +1,10 @@
+# files
+.classpath
+.project
+pom.xml.*
+release.properties
+
+# directories
+.settings/
+docs/
+target/
