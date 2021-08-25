@@ -21,7 +21,7 @@ Maven: `mvn install`
 - [x] Preliminary documentation (Javadoc)
 - [x] Run basic tests
 - [x] Set up CI and release process
-- [ ] Provide packages for Maven
+- [x] Provide packages for Maven
 - [ ] Implement test suite
 - [ ] Security audit
 - [ ] Memory management audit
