@@ -1,4 +1,4 @@
-[![Java CI with Maven](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml/badge.svg)](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml)
+[![CI](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml/badge.svg)](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml)
 
 # jOlm - Olm bindings for Java
 
