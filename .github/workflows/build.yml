@@ -1,43 +1,38 @@
 name: 'Build'
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
+on: [push, pull_request]
 
 jobs:
   build:
     name: 'Build and run tests'
-    runs-on: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    env:
+      OLM_VERSION: 3.2.4
+
     steps:
       - name: 'Clone repository'
         uses: actions/checkout@v2
 
-      - name: 'Install Linux dependencies'
+      - name: 'Install dependencies'
         run: |
-          sudo apt-get update
-          sudo apt-get install cmake gcc-multilib g++-multilib
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: 'Get latest CMake and ninja'
-        uses: lukka/get-cmake@latest
+          sudo apt update
+          sudo apt install cmake
 
       - name: 'Download Olm'
         run: |
-          curl -o olm.tar.bz2 https://gitlab.matrix.org/matrix-org/olm/-/archive/3.2.4/olm-3.2.4.tar.bz2
-          tar -xjvf olm.tar.bz2
-        shell: bash
+          curl -o olm-${OLM_VERSION}.tar.bz2 https://gitlab.matrix.org/matrix-org/olm/-/archive/${OLM_VERSION}/olm-${OLM_VERSION}.tar.bz2
+          tar -xjvf olm-${OLM_VERSION}.tar.bz2
 
       - name: 'Build and install Olm'
         run: |
-          cd olm-*
-          cmake . -Bbuild
+          cd  olm-${OLM_VERSION}
+          cmake -DCMAKE_INSTALL_PREFIX=/usr . -Bbuild
           cmake --build build
           sudo cmake --install build
           cd ..
-        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
 
       - name: 'Set up JDK 11'
         uses: actions/setup-java@v2
@@ -46,5 +41,5 @@ jobs:
           distribution: 'adopt'
           cache: maven
 
-      - name: 'Build with Maven'
+      - name: 'Build and verify'
         run: mvn --batch-mode verify --file pom.xml
