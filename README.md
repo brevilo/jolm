@@ -1,11 +1,13 @@
+[![Java CI with Maven](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml/badge.svg)](https://github.com/brevilo/jolm/actions/workflows/java-ci.yml)
+
 # jOlm - Olm bindings for Java
 
-These bindings for Java provide access to the C-API of the [Olm cryptographic library](https://gitlab.matrix.org/matrix-org/olm) used by [Matrix](https://matrix.org/).
+The bindings for Java provide access to the C-API of the [Olm cryptographic library](https://gitlab.matrix.org/matrix-org/olm) used by [Matrix](https://matrix.org/).
 
 ## Requirements
 
-* These bindings use Java Native Access (JNA) and expect `libolm` to be installed
-* Ways to get `libolm`:
+* The bindings use Java Native Access (JNA) and require `libolm` to be installed
+* How to get `libolm`:
   * Use your favorite package manager to install it (Linux, [macOS](https://brew.sh/))
   * Download the [latest version](https://gitlab.matrix.org/matrix-org/olm/-/releases) and [build it](https://gitlab.matrix.org/matrix-org/olm#building) yourself
 
@@ -18,7 +20,7 @@ Maven: `mvn install`
 - [x] Implement upstream API
 - [x] Preliminary documentation (Javadoc)
 - [x] Run basic tests
-- [ ] Set up CI and release process
+- [x] Set up CI and release process
 - [ ] Provide packages for Maven
 - [ ] Implement test suite
 - [ ] Security audit
