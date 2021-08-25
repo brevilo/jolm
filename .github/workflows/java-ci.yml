@@ -1,19 +1,45 @@
-name: Java CI
+name: 'Java CI'
 
 on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    name: 'Build and run tests'
+    runs-on: [ubuntu-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v2
-      - name: Install libolm
-        run: sudo apt-get install libolm3
-      - name: Set up JDK 11
+      - name: 'Clone repository'
+        uses: actions/checkout@v2
+
+      - name: 'Install Linux dependencies'
+        run: |
+          sudo apt-get update
+          sudo apt-get install cmake gcc-multilib g++-multilib
+        if: matrix.os == 'ubuntu-latest'
+
+      - name: 'Get latest CMake and ninja'
+        uses: lukka/get-cmake@latest
+
+      - name: 'Download Olm'
+        run: |
+          curl -o olm.tar.bz2 https://gitlab.matrix.org/matrix-org/olm/-/archive/3.2.4/olm-3.2.4.tar.bz2
+          tar -xjvf olm.tar.bz2
+        shell: bash
+
+      - name: 'Build and install Olm'
+        run: |
+          cd olm-*
+          cmake . -Bbuild
+          cmake --build build
+          sudo cmake --install build
+          cd ..
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+
+      - name: 'Set up JDK 11'
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
           cache: maven
-      - name: Build with Maven
+
+      - name: 'Build with Maven'
         run: mvn --batch-mode verify --file pom.xml

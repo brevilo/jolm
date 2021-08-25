@@ -6,8 +6,8 @@ The bindings for Java provide access to the C-API of the [Olm cryptographic libr
 
 ## Requirements
 
-* The bindings use Java Native Access (JNA) and require `libolm` to be installed
-* How to get `libolm`:
+* The bindings use Java Native Access (JNA) and require Olm 3.2 (or higher) to be installed
+* How to get Olm:
   * Use your favorite package manager to install it (Linux, [macOS](https://brew.sh/))
   * Download the [latest version](https://gitlab.matrix.org/matrix-org/olm/-/releases) and [build it](https://gitlab.matrix.org/matrix-org/olm#building) yourself
 
