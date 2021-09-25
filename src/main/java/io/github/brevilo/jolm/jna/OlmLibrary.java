@@ -35,6 +35,31 @@ public class OlmLibrary implements Library {
     Native.register(OlmLibrary.class, OlmLibrary.JNA_NATIVE_LIB);
   }
 
+  // olm/error.h
+  public static interface OlmErrorCode {
+    public static final int OLM_SUCCESS = 0;
+    public static final int OLM_NOT_ENOUGH_RANDOM = 1;
+    public static final int OLM_OUTPUT_BUFFER_TOO_SMALL = 2;
+    public static final int OLM_BAD_MESSAGE_VERSION = 3;
+    public static final int OLM_BAD_MESSAGE_FORMAT = 4;
+    public static final int OLM_BAD_MESSAGE_MAC = 5;
+    public static final int OLM_BAD_MESSAGE_KEY_ID = 6;
+    public static final int OLM_INVALID_BASE64 = 7;
+    public static final int OLM_BAD_ACCOUNT_KEY = 8;
+    public static final int OLM_UNKNOWN_PICKLE_VERSION = 9;
+    public static final int OLM_CORRUPTED_PICKLE = 10;
+    public static final int OLM_BAD_SESSION_KEY = 11;
+    public static final int OLM_UNKNOWN_MESSAGE_INDEX = 12;
+    public static final int OLM_BAD_LEGACY_ACCOUNT_PICKLE = 13;
+    public static final int OLM_BAD_SIGNATURE = 14;
+    public static final int OLM_INPUT_BUFFER_TOO_SMALL = 15;
+    public static final int OLM_SAS_THEIR_KEY_NOT_SET = 16;
+    public static final int OLM_PICKLE_EXTRA_DATA = 17;
+  }
+  ;
+
+  public static native String _olm_error_to_string(int error);
+
   // olm/olm.h
   public static final long OLM_MESSAGE_TYPE_PRE_KEY = 0;
   public static final long OLM_MESSAGE_TYPE_MESSAGE = 1;
@@ -45,6 +70,8 @@ public class OlmLibrary implements Library {
   public static native OlmInboundGroupSession olm_inbound_group_session(Pointer memory);
 
   public static native String olm_inbound_group_session_last_error(PointerByReference session);
+
+  public static native int olm_inbound_group_session_last_error_code(PointerByReference session);
 
   public static native NativeSize olm_clear_inbound_group_session(PointerByReference session);
 
@@ -126,6 +153,8 @@ public class OlmLibrary implements Library {
   public static native OlmOutboundGroupSession olm_outbound_group_session(Pointer memory);
 
   public static native String olm_outbound_group_session_last_error(PointerByReference session);
+
+  public static native int olm_outbound_group_session_last_error_code(PointerByReference session);
 
   public static native NativeSize olm_clear_outbound_group_session(PointerByReference session);
 
@@ -210,9 +239,15 @@ public class OlmLibrary implements Library {
 
   public static native String olm_account_last_error(PointerByReference account);
 
+  public static native int olm_account_last_error_code(PointerByReference account);
+
   public static native String olm_session_last_error(PointerByReference session);
 
+  public static native int olm_session_last_error_code(PointerByReference session);
+
   public static native String olm_utility_last_error(PointerByReference utility);
+
+  public static native int olm_utility_last_error_code(PointerByReference utility);
 
   public static native NativeSize olm_clear_account(PointerByReference account);
 
@@ -409,6 +444,8 @@ public class OlmLibrary implements Library {
 
   public static native String olm_pk_encryption_last_error(PointerByReference encryption);
 
+  public static native int olm_pk_encryption_last_error_code(PointerByReference encryption);
+
   public static native NativeSize olm_clear_pk_encryption(PointerByReference encryption);
 
   public static native NativeSize olm_pk_encryption_set_recipient_key(
@@ -441,6 +478,8 @@ public class OlmLibrary implements Library {
   public static native OlmPkDecryption olm_pk_decryption(Pointer memory);
 
   public static native String olm_pk_decryption_last_error(PointerByReference decryption);
+
+  public static native int olm_pk_decryption_last_error_code(PointerByReference decryption);
 
   public static native NativeSize olm_clear_pk_decryption(PointerByReference decryption);
 
@@ -503,6 +542,8 @@ public class OlmLibrary implements Library {
 
   public static native String olm_pk_signing_last_error(PointerByReference sign);
 
+  public static native int olm_pk_signing_last_error_code(PointerByReference sign);
+
   public static native NativeSize olm_clear_pk_signing(PointerByReference sign);
 
   public static native NativeSize olm_pk_signing_key_from_seed(
@@ -534,6 +575,8 @@ public class OlmLibrary implements Library {
 
   // olm/sas.h
   public static native String olm_sas_last_error(PointerByReference sas);
+
+  public static native int olm_sas_last_error_code(PointerByReference sas);
 
   public static native NativeSize olm_sas_size();
 
