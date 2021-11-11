@@ -224,7 +224,7 @@ public class Session {
 
     checkOlmResult(plainTextLength);
 
-    return Utils.fromNative(plainTextBuffer);
+    return Utils.fromNative(plainTextBuffer).substring(0, plainTextLength.intValue());
   }
 
   /**
