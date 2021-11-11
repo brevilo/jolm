@@ -195,15 +195,21 @@ public class Session {
    */
   public String decrypt(Message message) throws OlmException {
     // get native message
+    // (add a separate message buffer as olm_decrypt_max_plaintext_length() destroys it!)
     Memory messageBuffer = Utils.toNative(message.getCipherText());
+    Memory messageBufferCopy = Utils.toNative(message.getCipherText());
 
-    // prepare output buffer and index reference
+    // determine output buffer length
     NativeSize maxPlainTextLength =
         OlmLibrary.olm_decrypt_max_plaintext_length(
-            instance, new NativeSize(message.type()), messageBuffer, new NativeSize(messageBuffer));
+            instance,
+            new NativeSize(message.type()),
+            messageBufferCopy,
+            new NativeSize(messageBufferCopy));
 
     checkOlmResult(maxPlainTextLength);
 
+    // prepare output buffer
     Memory plainTextBuffer = new Memory(maxPlainTextLength.longValue());
 
     // call olm
