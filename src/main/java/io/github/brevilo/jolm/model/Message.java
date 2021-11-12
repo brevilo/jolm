@@ -16,11 +16,10 @@
 
 package io.github.brevilo.jolm.model;
 
+import io.github.brevilo.jolm.jna.OlmLibrary;
+
 /** Model class representing an Olm message. */
 public abstract class Message {
-  private static final long PREKEY = 0;
-  private static final long NORMAL = 1;
-
   private String cipherText;
 
   private Message(String cipherText) {
@@ -35,9 +34,9 @@ public abstract class Message {
    * @return new Message instance
    */
   public static Message get(String cipherText, long type) {
-    if (type == PREKEY) {
+    if (type == OlmLibrary.OLM_MESSAGE_TYPE_PRE_KEY) {
       return new Message.PreKey(cipherText);
-    } else if (type == NORMAL) {
+    } else if (type == OlmLibrary.OLM_MESSAGE_TYPE_MESSAGE) {
       return new Message.Normal(cipherText);
     } else {
       return null;
@@ -51,9 +50,9 @@ public abstract class Message {
    */
   public Long type() {
     if (this instanceof PreKey) {
-      return PREKEY;
+      return OlmLibrary.OLM_MESSAGE_TYPE_PRE_KEY;
     } else if (this instanceof Normal) {
-      return NORMAL;
+      return OlmLibrary.OLM_MESSAGE_TYPE_MESSAGE;
     } else {
       return null;
     }
