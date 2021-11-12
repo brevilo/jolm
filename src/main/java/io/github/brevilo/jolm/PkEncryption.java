@@ -26,9 +26,8 @@ import io.github.brevilo.jolm.model.PkMessage;
 /** Class to represent an Olm encryption object. */
 public class PkEncryption {
 
-  /** Encryption object backing store. */
-  public final OlmPkEncryption instance =
-      Utils.initialize(OlmLibrary::olm_pk_encryption, OlmLibrary::olm_pk_encryption_size);
+  // backing store
+  public final OlmPkEncryption instance;
 
   /**
    * Create a new encryption object for the given recipient key. The recepient's public key will be
@@ -38,6 +37,9 @@ public class PkEncryption {
    * @throws OlmException unspecified
    */
   public PkEncryption(String recipientKey) throws OlmException {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_pk_encryption, OlmLibrary::olm_pk_encryption_size);
+
     // get native key
     Memory keyBuffer = Utils.toNative(recipientKey);
 

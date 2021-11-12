@@ -26,9 +26,8 @@ import java.security.SecureRandom;
 /** Class to represent an Olm signing object. */
 public class PkSigning {
 
-  /** Signing object backing store. */
-  public final OlmPkSigning instance =
-      Utils.initialize(OlmLibrary::olm_pk_signing, OlmLibrary::olm_pk_signing_size);
+  // backing store
+  public final OlmPkSigning instance;
 
   private String publicKey;
 
@@ -42,6 +41,9 @@ public class PkSigning {
    *     <code>OUTPUT_BUFFER_TOO_SMALL</code> if the public key buffer is too small
    */
   public PkSigning(byte[] seed) throws OlmException {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_pk_signing, OlmLibrary::olm_pk_signing_size);
+
     // get native seed
     Memory seedBuffer = new Memory(seed.length);
     seedBuffer.write(0, seed, 0, seed.length);

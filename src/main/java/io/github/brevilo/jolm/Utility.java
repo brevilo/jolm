@@ -29,14 +29,16 @@ import io.github.brevilo.jolm.jna.OlmUtility;
 /** Class to provide libolm utility functions. */
 public class Utility {
 
-  /** Utility backing store. */
-  private final OlmUtility instance =
-      Utils.initialize(OlmLibrary::olm_utility, OlmLibrary::olm_utility_size);
+  // backing store
+  private final OlmUtility instance;
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
   /** Creates a new Utility object. */
   public Utility() {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_utility, OlmLibrary::olm_utility_size);
+
     // canonical JSON
     objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
   }

@@ -25,10 +25,8 @@ import io.github.brevilo.jolm.jna.OlmOutboundGroupSession;
 /** Class to represent an outbound Megolm session. */
 public class OutboundGroupSession {
 
-  /** OutboundGroupSession backing store. */
-  private final OlmOutboundGroupSession instance =
-      Utils.initialize(
-          OlmLibrary::olm_outbound_group_session, OlmLibrary::olm_outbound_group_session_size);
+  // backing store
+  private final OlmOutboundGroupSession instance;
 
   /**
    * Creates a new outbound Megolm session initialized with random data.
@@ -36,6 +34,11 @@ public class OutboundGroupSession {
    * @throws OlmException <code>NOT_ENOUGH_RANDOM</code> if there weren't enough random bytes
    */
   public OutboundGroupSession() throws OlmException {
+    // initialize backing store
+    instance =
+        Utils.initialize(
+            OlmLibrary::olm_outbound_group_session, OlmLibrary::olm_outbound_group_session_size);
+
     // generate randomness and create session
     NativeSize randomLength = OlmLibrary.olm_init_outbound_group_session_random_length(instance);
     Memory randomBuffer = Utils.randomBuffer(randomLength);

@@ -26,12 +26,14 @@ import io.github.brevilo.jolm.model.Message;
 /** Class to represent an Olm session. */
 public class Session {
 
-  /** Session backing store. */
-  public final OlmSession instance =
-      Utils.initialize(OlmLibrary::olm_session, OlmLibrary::olm_session_size);
+  // backing store
+  public final OlmSession instance;
 
   /** Private constructor. Use static create methods. */
-  private Session() {}
+  private Session() {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_session, OlmLibrary::olm_session_size);
+  }
 
   /** Clears the memory used to back this session. */
   public void clear() {

@@ -25,8 +25,8 @@ import io.github.brevilo.jolm.jna.OlmSas;
 /** Class to represent an Olm short authentication string (SAS) object. */
 public class Sas {
 
-  /** SAS object backing store. */
-  public final OlmSas instance = Utils.initialize(OlmLibrary::olm_sas, OlmLibrary::olm_sas_size);
+  // backing store
+  public final OlmSas instance;
 
   /**
    * Creates a new SAS object.
@@ -34,6 +34,9 @@ public class Sas {
    * @throws OlmException <code>NOT_ENOUGH_RANDOM</code> if there weren't enough random bytes
    */
   public Sas() throws OlmException {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_sas, OlmLibrary::olm_sas_size);
+
     // generate random private key
     NativeSize randomLength = OlmLibrary.olm_create_sas_random_length(instance);
     Memory randomBuffer = Utils.randomBuffer(randomLength);

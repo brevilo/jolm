@@ -27,13 +27,16 @@ import io.github.brevilo.jolm.model.GroupMessage;
 /** Class to represent an inbound Megolm session. */
 public class InboundGroupSession {
 
-  /** InboundGroupSession backing store. */
-  private final OlmInboundGroupSession instance =
-      Utils.initialize(
-          OlmLibrary::olm_inbound_group_session, OlmLibrary::olm_inbound_group_session_size);
+  // backing store
+  private final OlmInboundGroupSession instance;
 
-  /** Private constructor only used by {@link #unpickle(String, String)}. */
-  private InboundGroupSession() {}
+  /** Private constructor */
+  private InboundGroupSession() {
+    // initialize backing store
+    instance =
+        Utils.initialize(
+            OlmLibrary::olm_inbound_group_session, OlmLibrary::olm_inbound_group_session_size);
+  }
 
   /**
    * Creates a new inbound Megolm session using the provided session key. The key can be exported by
@@ -44,6 +47,9 @@ public class InboundGroupSession {
    *     <code>OLM_BAD_SESSION_KEY</code> if the sessionKey is invalid
    */
   public InboundGroupSession(String sessionKey) throws OlmException {
+    // call private constructor
+    this();
+
     // get native key
     Memory sessionKeyBuffer = Utils.toNative(sessionKey);
 
