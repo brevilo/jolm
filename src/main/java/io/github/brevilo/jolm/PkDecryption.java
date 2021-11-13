@@ -25,9 +25,9 @@ import io.github.brevilo.jolm.model.PkMessage;
 
 /** Class to represent an Olm decryption object. */
 public class PkDecryption {
-  /** Decryption object backing store. */
-  public final OlmPkDecryption instance =
-      Utils.initialize(OlmLibrary::olm_pk_decryption, OlmLibrary::olm_pk_decryption_size);
+
+  // backing store
+  public final OlmPkDecryption instance;
 
   private String publicKey;
 
@@ -38,6 +38,9 @@ public class PkDecryption {
    *     enough; <code>OUTPUT_BUFFER_TOO_SMALL</code> if the public key buffer was too small
    */
   public PkDecryption() throws OlmException {
+    // initialize backing store
+    instance = Utils.initialize(OlmLibrary::olm_pk_decryption, OlmLibrary::olm_pk_decryption_size);
+
     // generate random private key
     NativeSize privateKeyLength = OlmLibrary.olm_pk_private_key_length();
     Memory privateKeyBuffer = Utils.randomBuffer(privateKeyLength);

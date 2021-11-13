@@ -30,9 +30,8 @@ import io.github.brevilo.jolm.model.OneTimeKeys;
 /** Class to represent an Olm account. */
 public class Account {
 
-  /** Account backing store. */
-  public final OlmAccount instance =
-      Utils.initialize(OlmLibrary::olm_account, OlmLibrary::olm_account_size);
+  // backing store
+  public final OlmAccount instance;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -42,6 +41,9 @@ public class Account {
    * @throws OlmException <code>NOT_ENOUGH_RANDOM</code> if there weren't enough random bytes
    */
   public Account() throws OlmException {
+    // initialize account backing store
+    instance = Utils.initialize(OlmLibrary::olm_account, OlmLibrary::olm_account_size);
+
     // canonical JSON
     objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
