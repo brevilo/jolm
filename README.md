@@ -7,7 +7,7 @@ jOlm provides Java bindings to the C-API of the [Olm cryptographic library](http
 
 ## Requirements
 
-* Java SE 11
+* Java SE 1.8
 * Olm 3.2 or higher
 
 jOlm uses Java Native Access (JNA) and currently requires Olm 3.2 (or higher) to be installed. How to get Olm:
