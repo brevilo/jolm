@@ -16,18 +16,26 @@
 
 package io.github.brevilo.jolm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.brevilo.jolm.model.IdentityKeys;
+import io.github.brevilo.jolm.model.OneTimeKeys;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 class AccountTest {
+  final int ONETIME_KEY_COUNT = 5;
 
   Account account;
 
@@ -42,13 +50,112 @@ class AccountTest {
   }
 
   @Test
+  @Order(0)
+  void testCreateAccount() throws Exception {
+    assertNotNull(account);
+  }
+
+  @Test
   void testIdentityKeys() throws Exception {
     IdentityKeys keys = account.identityKeys();
+    assertNotNull(keys);
 
     assertNotNull(keys.getCurve25519());
     assertFalse(keys.getCurve25519().isEmpty());
 
     assertNotNull(keys.getEd25519());
     assertFalse(keys.getEd25519().isEmpty());
+  }
+
+  @Test
+  void testMaxNumberOfOneTimeKeys() throws Exception {
+    assertTrue(account.maxNumberOfOneTimeKeys() > 0);
+  }
+
+  @Test
+  @Order(1)
+  void testGenerateOneTimeKeys() throws Exception {
+    account.generateOneTimeKeys(ONETIME_KEY_COUNT);
+  }
+
+  @Test
+  @Order(2)
+  void testOneTimeKeys() throws Exception {
+    OneTimeKeys keys = account.oneTimeKeys();
+    assertNotNull(keys);
+
+    assertNotNull(keys.getCurve25519());
+    assertEquals(keys.getCurve25519().size(), ONETIME_KEY_COUNT);
+  }
+
+  @Test
+  @Order(3)
+  void testRemoveOneTimeKeys() throws Exception {
+    // using identityKeys and oneTimeKeys from own account (for test brevity)
+    String identityKey = account.identityKeys().getCurve25519();
+    OneTimeKeys oneTimeKeys = account.oneTimeKeys();
+    String oneTimeKey = (String) oneTimeKeys.getCurve25519().values().toArray()[0];
+
+    Session session = Session.createOutboundSession(account, identityKey, oneTimeKey);
+    account.removeOneTimeKeys(session);
+
+    oneTimeKeys = account.oneTimeKeys();
+    assertEquals(oneTimeKeys.getCurve25519().size(), ONETIME_KEY_COUNT - 1);
+
+    session.clear();
+  }
+
+  @Test
+  @Order(4)
+  void testMarkOneTimeKeysAsPublished() throws Exception {
+    account.markOneTimeKeysAsPublished();
+    assertEquals(account.oneTimeKeys().getCurve25519().size(), 0);
+  }
+
+  @Test
+  void testSign() throws Exception {
+    String signature = account.sign("TEST");
+    assertNotNull(signature);
+    assertFalse(signature.isEmpty());
+  }
+
+  @Test
+  @Order(1)
+  void testGenerateFallbackKey() throws Exception {
+    account.generateFallbackKey();
+  }
+
+  @Test
+  @Order(2)
+  void testFallbackKey() throws Exception {
+    OneTimeKeys key = account.fallbackKey();
+    assertNotNull(key);
+
+    assertNotNull(key.getCurve25519());
+    assertEquals(key.getCurve25519().size(), 1);
+  }
+
+  @Test
+  void testSerialization() throws Exception {
+    final String key = "SECRET";
+    final Account baseline = new Account();
+
+    baseline.generateOneTimeKeys(1);
+    baseline.generateFallbackKey();
+
+    String serialized = baseline.pickle(key);
+    assertNotNull(serialized);
+
+    Account deserialized = Account.unpickle(key, serialized);
+    assertEquals(
+        baseline.identityKeys().getCurve25519(), deserialized.identityKeys().getCurve25519());
+    assertEquals(baseline.identityKeys().getEd25519(), deserialized.identityKeys().getEd25519());
+    assertEquals(
+        baseline.oneTimeKeys().getCurve25519(), deserialized.oneTimeKeys().getCurve25519());
+    assertEquals(
+        baseline.fallbackKey().getCurve25519(), deserialized.fallbackKey().getCurve25519());
+
+    deserialized.clear();
+    baseline.clear();
   }
 }
