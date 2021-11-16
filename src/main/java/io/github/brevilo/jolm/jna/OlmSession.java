@@ -17,15 +17,14 @@
 package io.github.brevilo.jolm.jna;
 
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 
-/** Internal backing store. */
-public class OlmSession extends PointerByReference {
-  public OlmSession(Pointer address) {
-    super(address);
-  }
-
+/** Class representing a <code>libolm</code> session instance. */
+public class OlmSession extends OlmObject {
   public OlmSession() {
     super();
+  }
+
+  public OlmSession(Pointer address) {
+    super(address);
   }
 }

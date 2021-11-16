@@ -17,15 +17,14 @@
 package io.github.brevilo.jolm.jna;
 
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 
-/** Internal backing store. */
-public class OlmAccount extends PointerByReference {
-  public OlmAccount(Pointer address) {
-    super(address);
-  }
-
+/** Class representing a <code>libolm</code> account instance. */
+public class OlmAccount extends OlmObject {
   public OlmAccount() {
     super();
+  }
+
+  public OlmAccount(Pointer address) {
+    super(address);
   }
 }

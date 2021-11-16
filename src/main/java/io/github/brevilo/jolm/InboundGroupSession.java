@@ -30,7 +30,7 @@ public class InboundGroupSession {
   // backing store
   private final OlmInboundGroupSession instance;
 
-  /** Private constructor */
+  /** Private constructor. */
   private InboundGroupSession() {
     // initialize backing store
     instance =

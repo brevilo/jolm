@@ -17,15 +17,14 @@
 package io.github.brevilo.jolm.jna;
 
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 
-/** Internal backing store. */
-public class OlmPkDecryption extends PointerByReference {
-  public OlmPkDecryption(Pointer address) {
-    super(address);
-  }
-
+/** Class representing a <code>libolm</code> pk_decryption instance. */
+public class OlmPkDecryption extends OlmObject {
   public OlmPkDecryption() {
     super();
+  }
+
+  public OlmPkDecryption(Pointer address) {
+    super(address);
   }
 }

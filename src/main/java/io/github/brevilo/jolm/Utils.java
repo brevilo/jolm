@@ -25,6 +25,7 @@ import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
 import io.github.brevilo.jolm.jna.NativeSize;
+import io.github.brevilo.jolm.jna.OlmObject;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.concurrent.Callable;
@@ -41,11 +42,11 @@ public class Utils {
    * @param <T> olm object type
    * @param function reference to olm object initializer function
    * @param getSize reference to olm object sizing function
-   * @return pointer to allocated backing store
+   * @return instance of the allocated olm object
    * @throws RuntimeException olm object's size function returned an error
    * @throws OutOfMemoryError backing store could not be allocated
    */
-  public static <T extends PointerByReference> T initialize(
+  public static <T extends OlmObject> T initialize(
       Function<Pointer, T> function, Callable<NativeSize> getSize)
       throws RuntimeException, OutOfMemoryError {
 
@@ -59,12 +60,15 @@ public class Utils {
     Memory buffer = new Memory(size.longValue());
 
     // create instance within buffer
-    T pointer = function.apply(buffer);
-    if (pointer == null) {
+    T instance = function.apply(buffer);
+    if (instance == null) {
       throw new OutOfMemoryError();
     }
 
-    return pointer;
+    // keep backing store (prevent premature GCing)
+    instance.setBackingStore(buffer);
+
+    return instance;
   }
 
   /**
