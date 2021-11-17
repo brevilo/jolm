@@ -85,7 +85,7 @@ class AccountTest {
     assertNotNull(keys);
 
     assertNotNull(keys.getCurve25519());
-    assertEquals(keys.getCurve25519().size(), ONETIME_KEY_COUNT);
+    assertEquals(ONETIME_KEY_COUNT, keys.getCurve25519().size());
   }
 
   @Test
@@ -100,7 +100,7 @@ class AccountTest {
     account.removeOneTimeKeys(session);
 
     oneTimeKeys = account.oneTimeKeys();
-    assertEquals(oneTimeKeys.getCurve25519().size(), ONETIME_KEY_COUNT - 1);
+    assertEquals(ONETIME_KEY_COUNT - 1, oneTimeKeys.getCurve25519().size());
 
     session.clear();
   }
@@ -109,7 +109,7 @@ class AccountTest {
   @Order(4)
   void testMarkOneTimeKeysAsPublished() throws Exception {
     account.markOneTimeKeysAsPublished();
-    assertEquals(account.oneTimeKeys().getCurve25519().size(), 0);
+    assertEquals(0, account.oneTimeKeys().getCurve25519().size());
   }
 
   @Test
@@ -132,7 +132,7 @@ class AccountTest {
     assertNotNull(key);
 
     assertNotNull(key.getCurve25519());
-    assertEquals(key.getCurve25519().size(), 1);
+    assertEquals(1, key.getCurve25519().size());
   }
 
   @Test
