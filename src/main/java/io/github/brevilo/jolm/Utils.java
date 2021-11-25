@@ -95,13 +95,18 @@ public class Utils {
    * Converts a raw memory buffer into a UTF-8 string.
    *
    * @param buffer memory buffer to convert
-   * @return string representation of the memory buffer
+   * @return trimmed string representation of the memory buffer
    * @throws RuntimeException UTF-8 is unsupported
    */
   public static String fromNative(Memory buffer) {
+    // shorten to actual string length
     NativeSize size = new NativeSize(buffer.size());
+    Long stringEnd = new Long(buffer.indexOf(0, (byte) 0));
+    int length = stringEnd.intValue() < size.intValue() ? stringEnd.intValue() : size.intValue();
+
     try {
-      return new String(buffer.getByteArray(0, size.intValue()), Constant.UTF8);
+      // return trimmed string
+      return new String(buffer.getByteArray(0, length), Constant.UTF8).trim();
     } catch (UnsupportedEncodingException e) {
       throw new RuntimeException(e);
     }
