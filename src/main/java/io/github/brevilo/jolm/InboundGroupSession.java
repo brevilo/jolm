@@ -163,12 +163,14 @@ public class InboundGroupSession {
    */
   public GroupMessage decrypt(String message) throws OlmException {
     // get native message
+    // (add a separate message buffer as olm_group_decrypt_max_plaintext_length() destroys it!)
     Memory messageBuffer = Utils.toNative(message);
+    Memory messageBufferCopy = Utils.toNative(message);
 
     // prepare output buffer and index reference
     NativeSize maxPlainTextLength =
         OlmLibrary.olm_group_decrypt_max_plaintext_length(
-            instance, messageBuffer, new NativeSize(messageBuffer));
+            instance, messageBufferCopy, new NativeSize(messageBufferCopy));
 
     checkOlmResult(maxPlainTextLength);
 
