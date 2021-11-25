@@ -59,9 +59,9 @@ public class Session {
   }
 
   /**
-   * Check if the session received a message.
+   * Check if the session received a message of type <code>MESSAGE</code>.
    *
-   * @return true if the session received a message
+   * @return true if the session received a <code>MESSAGE</code> message
    */
   public boolean hasReceivedMessage() {
     return OlmLibrary.olm_session_has_received_message(instance) != 0;
@@ -83,6 +83,7 @@ public class Session {
     // call olm
     OlmLibrary.olm_session_describe(instance, buffer, bufferSize);
 
+    // return result
     return Utils.fromNative(buffer);
   }
 
