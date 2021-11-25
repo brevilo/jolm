@@ -16,8 +16,11 @@
 
 package io.github.brevilo.jolm;
 
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import io.github.brevilo.jolm.Utils.OlmException;
+import io.github.brevilo.jolm.jna.OlmLibrary;
+import io.github.brevilo.jolm.model.IdentityKeys;
 import java.security.MessageDigest;
 import java.util.Base64;
 import org.junit.jupiter.api.AfterAll;
@@ -42,16 +45,62 @@ class UtilityTest {
   }
 
   @Test
+  void testEd25519Verify() throws Exception {
+    final String failString = "SNAFU";
+    final String message = Utils.canonicalizeJson("{ \"content\" : {} }");
+
+    // sign test message
+    Account account = new Account();
+    IdentityKeys keys = account.identityKeys();
+    String signature = account.sign(message);
+
+    // good verification
+    utility.ed25519_verify(keys.getEd25519(), message, signature);
+
+    // bad key
+    try {
+      utility.ed25519_verify(failString, message, signature);
+    } catch (OlmException e) {
+      String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
+      assertEquals(expected, e.getMessage());
+    }
+
+    // bad message for signature
+    try {
+      utility.ed25519_verify(keys.getEd25519(), "{}", signature);
+    } catch (OlmException e) {
+      String expected =
+          OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);
+      assertEquals(expected, e.getMessage());
+    }
+
+    // bad signature format
+    try {
+      utility.ed25519_verify(keys.getEd25519(), message, failString);
+    } catch (OlmException e) {
+      String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
+      assertEquals(expected, e.getMessage());
+    }
+
+    // bad signature
+    try {
+      utility.ed25519_verify(keys.getEd25519(), message, keys.getEd25519());
+    } catch (OlmException e) {
+      String expected =
+          OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);
+      assertEquals(expected, e.getMessage());
+    }
+  }
+
+  @Test
   void testSha256() throws Exception {
     final String testString = "TEST";
     final String testHash = utility.sha256(testString);
 
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
-    byte[] trueBytes = digest.digest(testString.getBytes("UTF-8"));
+    byte[] trueBytes = digest.digest(testString.getBytes(Constant.UTF8));
     String trueHash = Base64.getEncoder().withoutPadding().encodeToString(trueBytes);
 
-    if (!testHash.equals(trueHash)) {
-      fail(String.format("SHA-256 hash mismatch: %s != %s", testHash, trueHash));
-    }
+    assertEquals(trueHash, testHash);
   }
 }
