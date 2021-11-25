@@ -32,6 +32,16 @@ public class PkSigning {
   private String publicKey;
 
   /**
+   * Creates a new signing object and initializes a new key pair with a random seed.
+   *
+   * @throws OlmException <code>INPUT_BUFFER_TOO_SMALL</code> if the seed buffer is too small;
+   *     <code>OUTPUT_BUFFER_TOO_SMALL</code> if the public key buffer is too small
+   */
+  public PkSigning() throws OlmException {
+    this(generateSeed());
+  }
+
+  /**
    * Creates a new signing object and initializes a new key pair based on the given random seed. Get
    * the required seed length or a generated seed via {@link #seedLength()} and {@link
    * #generateSeed()}.
