@@ -152,7 +152,6 @@ class SessionTest {
 
     String serialized = aliceSession.pickle(key);
     assertNotNull(serialized);
-    assertNotNull(serialized);
     assertFalse(serialized.isEmpty());
 
     Session deserialized = Session.unpickle(key, serialized);
