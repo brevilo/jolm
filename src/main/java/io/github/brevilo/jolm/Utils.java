@@ -18,8 +18,8 @@ package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
@@ -243,10 +243,8 @@ public class Utils {
       Account account, String json, String userId, String keyAlgorithm, String deviceId)
       throws OlmException, JsonProcessingException {
 
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
-
     // parse JSON string
+    ObjectMapper objectMapper = new ObjectMapper();
     ObjectNode node = (ObjectNode) objectMapper.readTree(json);
 
     // strip nodes not to be signed
@@ -254,7 +252,7 @@ public class Utils {
     final JsonNode unsignedNode = node.remove(Constant.JSON_UNSIGNED);
 
     // sign canonical JSON
-    String signature = account.sign(objectMapper.writeValueAsString(node));
+    String signature = account.sign(Utils.canonicalizeJson(node));
 
     // add signature node
     if (signaturesNode == null || signaturesNode.isNull()) {
@@ -270,7 +268,42 @@ public class Utils {
       node.set("unsigned", unsignedNode);
     }
 
-    return objectMapper.writeValueAsString(node);
+    return Utils.canonicalizeJson(node);
+  }
+
+  /**
+   * Formats the given node as canonical JSON.
+   *
+   * @see <a href="https://matrix.org/docs/spec/appendices#canonical-json">Matrix: Canonical
+   *     JSON</a>
+   * @param node the JSON node to canonicalize
+   * @return the JSON string in canonical format
+   * @throws JsonProcessingException serialization error
+   */
+  public static String canonicalizeJson(JsonNode node) throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+
+    // re-sort keys
+    Object object = objectMapper.treeToValue(node, Object.class);
+
+    return objectMapper.writeValueAsString(object);
+  }
+
+  /**
+   * Formats the given string as canonical JSON.
+   *
+   * @see <a href="https://matrix.org/docs/spec/appendices#canonical-json">Matrix: Canonical
+   *     JSON</a>
+   * @param json the JSON string to canonicalize
+   * @return the JSON string in canonical format
+   * @throws JsonProcessingException (de)serialization error
+   */
+  public static String canonicalizeJson(String json) throws JsonProcessingException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    JsonNode node = objectMapper.readTree(json);
+
+    return Utils.canonicalizeJson(node);
   }
 
   /** Exception representing error messages returned by olm function calls. */

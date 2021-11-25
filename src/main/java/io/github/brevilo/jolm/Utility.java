@@ -17,7 +17,6 @@
 package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jna.Memory;
@@ -38,9 +37,6 @@ public class Utility {
   public Utility() {
     // initialize backing store
     instance = Utils.initialize(OlmLibrary::olm_utility, OlmLibrary::olm_utility_size);
-
-    // canonical JSON
-    objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
   }
 
   /** Clears the memory used to back this utility. */
@@ -69,7 +65,7 @@ public class Utility {
 
     // get content
     Memory keyBuffer = Utils.toNative(key);
-    Memory messageBuffer = Utils.toNative(objectMapper.writeValueAsString(node));
+    Memory messageBuffer = Utils.toNative(Utils.canonicalizeJson(node));
     Memory signatureBuffer = Utils.toNative(signature);
 
     // call olm

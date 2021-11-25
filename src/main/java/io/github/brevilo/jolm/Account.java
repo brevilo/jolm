@@ -17,7 +17,6 @@
 package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jna.Memory;
 import io.github.brevilo.jolm.Utils.OlmException;
@@ -43,9 +42,6 @@ public class Account {
   public Account() throws OlmException {
     // initialize account backing store
     instance = Utils.initialize(OlmLibrary::olm_account, OlmLibrary::olm_account_size);
-
-    // canonical JSON
-    objectMapper.configure(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY, true);
 
     // generate randomness and create account
     NativeSize randomLength = OlmLibrary.olm_create_account_random_length(instance);
