@@ -16,15 +16,27 @@
 
 package io.github.brevilo.jolm.jna;
 
+import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.PointerByReference;
 
-/** Class representing a <code>libolm</code> pk_encryption instance. */
-public class OlmPkEncryption extends OlmObject {
-  public OlmPkEncryption() {
+/** Internal backing store for all libolm objects. */
+public abstract class OlmObject extends PointerByReference {
+  private Memory backingStore;
+
+  public OlmObject() {
     super();
   }
 
-  public OlmPkEncryption(Pointer address) {
+  public OlmObject(Pointer address) {
     super(address);
+  }
+
+  public Memory getBackingStore() {
+    return backingStore;
+  }
+
+  public void setBackingStore(Memory backingStore) {
+    this.backingStore = backingStore;
   }
 }

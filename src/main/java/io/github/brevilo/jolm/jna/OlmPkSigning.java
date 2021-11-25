@@ -17,15 +17,14 @@
 package io.github.brevilo.jolm.jna;
 
 import com.sun.jna.Pointer;
-import com.sun.jna.ptr.PointerByReference;
 
-/** Internal backing store. */
-public class OlmPkSigning extends PointerByReference {
-  public OlmPkSigning(Pointer address) {
-    super(address);
-  }
-
+/** Class representing a <code>libolm</code> pk_signing instance. */
+public class OlmPkSigning extends OlmObject {
   public OlmPkSigning() {
     super();
+  }
+
+  public OlmPkSigning(Pointer address) {
+    super(address);
   }
 }
