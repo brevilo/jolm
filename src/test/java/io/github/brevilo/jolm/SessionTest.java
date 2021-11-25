@@ -17,27 +17,30 @@
 package io.github.brevilo.jolm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import io.github.brevilo.jolm.model.Message;
 import io.github.brevilo.jolm.model.OneTimeKeys;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 
 @TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(OrderAnnotation.class)
 class SessionTest {
-  final String message = "5-BY-5!";
-
   Account aliceAccount;
   Session aliceSession;
 
   Account bobAccount;
   Session bobSession;
-
-  String bobIdentityKey;
-  String bobOneTimeKey;
 
   @BeforeAll
   void setUp() throws Exception {
@@ -55,36 +58,87 @@ class SessionTest {
   }
 
   @Test
+  @Order(1)
   void testAliceToBob() throws Exception {
-    // generate bob's identity key
-    bobIdentityKey = bobAccount.identityKeys().getCurve25519();
+    final String message = "5-BY-5!";
+
+    // generate identity keys
+    String aliceIdentityKey = aliceAccount.identityKeys().getCurve25519();
+    String bobIdentityKey = bobAccount.identityKeys().getCurve25519();
 
     // generate bob's one-time key
     bobAccount.generateOneTimeKeys(1);
     OneTimeKeys bobOneTimeKeys = bobAccount.oneTimeKeys();
-    bobOneTimeKeys
-        .getCurve25519()
-        .forEach(
-            (id, key) -> {
-              bobOneTimeKey = key;
-            });
+    String bobOneTimeKey = (String) bobOneTimeKeys.getCurve25519().values().toArray()[0];
 
     // create alice's outbound olm Session (to bob)
     aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey);
 
-    // encrypt message for bob
+    // encrypt PRE_KEY message for bob
     Message encryptedMessage = aliceSession.encrypt(message);
 
-    // create bob's inbound olm session (from alice)
-    bobSession = Session.createInboundSession(bobAccount, encryptedMessage.getCipherText());
+    // create bob's inbound olm test session (from alice)
+    Session bobTestSession =
+        Session.createInboundSession(bobAccount, encryptedMessage.getCipherText());
+    assertNotNull(bobTestSession.sessionId());
+    bobTestSession.clear();
 
-    // decrypt message from alice
-    String decryptedMessage = bobSession.decrypt(encryptedMessage);
+    // create bob's verified session
+    bobSession =
+        Session.createInboundSessionFrom(
+            bobAccount, aliceIdentityKey, encryptedMessage.getCipherText());
 
-    // compare message content
-    assertEquals(decryptedMessage, message);
+    // ensure this isn't a MESSAGE message (but a PRE_KEY message)
+    assertFalse(bobSession.hasReceivedMessage());
+
+    // verify an incoming PRE_KEY message
+    if (bobSession.matchesInboundSession(encryptedMessage.getCipherText())) {
+
+      if (bobSession.matchesInboundSessionFrom(
+          aliceIdentityKey, encryptedMessage.getCipherText())) {
+
+        // decrypt message from alice
+        String decryptedMessage = bobSession.decrypt(encryptedMessage);
+
+        // compare message content
+        assertEquals(message, decryptedMessage);
+      } else {
+        fail("PRE_KEY message doesn't match expected identity key!");
+      }
+    } else {
+      fail("PRE_KEY message doesn't match inbound session!");
+    }
 
     // remove used one-time key
     bobAccount.removeOneTimeKeys(bobSession);
+  }
+
+  @Test
+  @Order(2)
+  void testSessionId() throws Exception {
+    assertNotNull(aliceSession.sessionId());
+    assertNotNull(bobSession.sessionId());
+    assertEquals(aliceSession.sessionId(), bobSession.sessionId());
+  }
+
+  @Test
+  @Order(2)
+  void testDescribe() throws Exception {
+    final long LENGTH = 128;
+    String description = aliceSession.describe(LENGTH);
+    assertNotNull(description);
+    assertTrue(description.length() <= LENGTH);
+  }
+
+  @Test
+  @Order(3)
+  void testSerialization() throws Exception {
+    final String key = "SECRET";
+
+    String serialized = aliceSession.pickle(key);
+    assertNotNull(serialized);
+
+    Session deserialized = Session.unpickle(key, serialized);
+    assertEquals(aliceSession.sessionId(), deserialized.sessionId());
   }
 }
