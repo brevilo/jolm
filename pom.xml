@@ -4,7 +4,7 @@
 
   <groupId>io.github.brevilo</groupId>
   <artifactId>jolm</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>jOlm</name>
@@ -30,7 +30,7 @@
     <connection>scm:git:https://github.com/brevilo/jolm.git</connection>
     <developerConnection>scm:git:git@github.com:brevilo/jolm.git</developerConnection>
     <url>https://github.com/brevilo/jolm/tree/main</url>
-    <tag>v1.0.2</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
