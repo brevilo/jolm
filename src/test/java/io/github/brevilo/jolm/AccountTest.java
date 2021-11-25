@@ -96,6 +96,9 @@ class AccountTest {
     OneTimeKeys oneTimeKeys = account.oneTimeKeys();
     String oneTimeKey = (String) oneTimeKeys.getCurve25519().values().toArray()[0];
 
+    assertFalse(identityKey.isEmpty());
+    assertFalse(oneTimeKey.isEmpty());
+
     Session session = Session.createOutboundSession(account, identityKey, oneTimeKey);
     account.removeOneTimeKeys(session);
 
@@ -132,6 +135,7 @@ class AccountTest {
     assertNotNull(key);
 
     assertNotNull(key.getCurve25519());
+    assertFalse(key.getCurve25519().isEmpty());
     assertEquals(1, key.getCurve25519().size());
   }
 
@@ -145,6 +149,7 @@ class AccountTest {
 
     String serialized = baseline.pickle(key);
     assertNotNull(serialized);
+    assertFalse(serialized.isEmpty());
 
     Account deserialized = Account.unpickle(key, serialized);
     assertEquals(

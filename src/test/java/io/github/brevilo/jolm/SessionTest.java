@@ -64,12 +64,19 @@ class SessionTest {
 
     // generate identity keys
     String aliceIdentityKey = aliceAccount.identityKeys().getCurve25519();
+    assertNotNull(aliceIdentityKey);
+    assertFalse(aliceIdentityKey.isEmpty());
+
     String bobIdentityKey = bobAccount.identityKeys().getCurve25519();
+    assertNotNull(bobIdentityKey);
+    assertFalse(bobIdentityKey.isEmpty());
 
     // generate bob's one-time key
     bobAccount.generateOneTimeKeys(1);
     OneTimeKeys bobOneTimeKeys = bobAccount.oneTimeKeys();
     String bobOneTimeKey = (String) bobOneTimeKeys.getCurve25519().values().toArray()[0];
+    assertNotNull(bobOneTimeKey);
+    assertFalse(bobOneTimeKey.isEmpty());
 
     // create alice's outbound olm Session (to bob)
     aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey);
@@ -99,6 +106,8 @@ class SessionTest {
 
         // decrypt message from alice
         String decryptedMessage = bobSession.decrypt(encryptedMessage);
+        assertNotNull(decryptedMessage);
+        assertFalse(decryptedMessage.isEmpty());
 
         // compare message content
         assertEquals(message, decryptedMessage);
@@ -116,9 +125,14 @@ class SessionTest {
   @Test
   @Order(2)
   void testSessionId() throws Exception {
-    assertNotNull(aliceSession.sessionId());
-    assertNotNull(bobSession.sessionId());
-    assertEquals(aliceSession.sessionId(), bobSession.sessionId());
+    String aliceSessionId = aliceSession.sessionId();
+    String bobSessionId = bobSession.sessionId();
+
+    assertNotNull(aliceSessionId);
+    assertFalse(aliceSessionId.isEmpty());
+    assertNotNull(bobSessionId);
+    assertFalse(bobSessionId.isEmpty());
+    assertEquals(aliceSessionId, bobSessionId);
   }
 
   @Test
@@ -126,6 +140,7 @@ class SessionTest {
   void testDescribe() throws Exception {
     final long LENGTH = 128;
     String description = aliceSession.describe(LENGTH);
+
     assertNotNull(description);
     assertTrue(description.length() <= LENGTH);
   }
@@ -137,8 +152,12 @@ class SessionTest {
 
     String serialized = aliceSession.pickle(key);
     assertNotNull(serialized);
+    assertNotNull(serialized);
+    assertFalse(serialized.isEmpty());
 
     Session deserialized = Session.unpickle(key, serialized);
     assertEquals(aliceSession.sessionId(), deserialized.sessionId());
+
+    deserialized.clear();
   }
 }

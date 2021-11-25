@@ -17,6 +17,8 @@
 package io.github.brevilo.jolm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.github.brevilo.jolm.Utils.OlmException;
 import io.github.brevilo.jolm.jna.OlmLibrary;
@@ -54,6 +56,9 @@ class UtilityTest {
     IdentityKeys keys = account.identityKeys();
     String signature = account.sign(message);
 
+    assertNotNull(signature);
+    assertFalse(signature.isEmpty());
+
     // good verification
     utility.ed25519_verify(keys.getEd25519(), message, signature);
 
@@ -62,6 +67,9 @@ class UtilityTest {
       utility.ed25519_verify(failString, message, signature);
     } catch (OlmException e) {
       String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
+
+      assertNotNull(expected);
+      assertFalse(expected.isEmpty());
       assertEquals(expected, e.getMessage());
     }
 
@@ -71,6 +79,9 @@ class UtilityTest {
     } catch (OlmException e) {
       String expected =
           OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);
+
+      assertNotNull(expected);
+      assertFalse(expected.isEmpty());
       assertEquals(expected, e.getMessage());
     }
 
@@ -79,6 +90,9 @@ class UtilityTest {
       utility.ed25519_verify(keys.getEd25519(), message, failString);
     } catch (OlmException e) {
       String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
+
+      assertNotNull(expected);
+      assertFalse(expected.isEmpty());
       assertEquals(expected, e.getMessage());
     }
 
@@ -88,6 +102,9 @@ class UtilityTest {
     } catch (OlmException e) {
       String expected =
           OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);
+
+      assertNotNull(expected);
+      assertFalse(expected.isEmpty());
       assertEquals(expected, e.getMessage());
     }
   }
@@ -96,6 +113,9 @@ class UtilityTest {
   void testSha256() throws Exception {
     final String testString = "TEST";
     final String testHash = utility.sha256(testString);
+
+    assertNotNull(testHash);
+    assertFalse(testHash.isEmpty());
 
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     byte[] trueBytes = digest.digest(testString.getBytes(Constant.UTF8));
