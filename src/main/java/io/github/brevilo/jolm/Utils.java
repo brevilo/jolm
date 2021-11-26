@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
@@ -281,13 +282,15 @@ public class Utils {
    * @throws JsonProcessingException serialization error
    */
   public static String canonicalizeJson(JsonNode node) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true);
+    JsonMapper jsonMapper =
+        JsonMapper.builder()
+            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
+            .build();
 
     // re-sort keys
-    Object object = objectMapper.treeToValue(node, Object.class);
+    Object object = jsonMapper.treeToValue(node, Object.class);
 
-    return objectMapper.writeValueAsString(object);
+    return jsonMapper.writeValueAsString(object);
   }
 
   /**
