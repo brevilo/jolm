@@ -36,7 +36,7 @@ Using maven: `mvn install`
 - [x] Run basic tests
 - [x] Set up CI and release process
 - [x] Provide packages for Maven
-- [ ] Implement test suite
+- [x] Implement test suite
 - [ ] Security audit
 - [ ] Memory management audit
 - [ ] Consider Gradle to integrate Olm
