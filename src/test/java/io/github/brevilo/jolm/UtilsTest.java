@@ -17,13 +17,64 @@
 package io.github.brevilo.jolm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class UtilsTest {
+
+  @Test
+  void testSignJson() throws Exception {
+    final ObjectMapper objectMapper = new ObjectMapper();
+    final Account account = new Account();
+    final String jsonShort =
+        "{\"name\":\"example.org\",\"signing_keys\":{\"ed25519:1\":\"XSl0kuyvrXNj6A+7/tkrB9sxSbRi08Of5uRhxOqZtEQ\"}}";
+    final String jsonFull =
+        "{\n"
+            + "   \"name\": \"example.org\",\n"
+            + "   \"signing_keys\": {\n"
+            + "     \"ed25519:1\": \"XSl0kuyvrXNj6A+7/tkrB9sxSbRi08Of5uRhxOqZtEQ\"\n"
+            + "   },\n"
+            + "   \"unsigned\": {\n"
+            + "      \"age_ts\": 922834800000\n"
+            + "   },\n"
+            + "   \"signatures\": {\n"
+            + "      \"example.org\": {\n"
+            + "         \"ed25519:1\": \"s76RUgajp8w172am0zQb/iPTHsRnb4SkrzGoeCOSFfcBY2V/1c8QfrmdXHpvnc2jK5BD1WiJIxiMW95fMjK7Bw\"\n"
+            + "      }\n"
+            + "   }\n"
+            + "}";
+
+    // sign JSON
+    String signedJson =
+        Utils.signJson(account, jsonFull, "USERID", Constant.KEY_ED25519, "DEVICEID");
+
+    // verify original content
+    JsonNode node = objectMapper.readTree(signedJson);
+    assertEquals("example.org", node.at("/name").asText());
+    assertEquals(
+        "XSl0kuyvrXNj6A+7/tkrB9sxSbRi08Of5uRhxOqZtEQ", node.at("/signing_keys/ed25519:1").asText());
+    assertEquals("922834800000", node.at("/unsigned/age_ts").asText());
+    assertEquals(
+        "s76RUgajp8w172am0zQb/iPTHsRnb4SkrzGoeCOSFfcBY2V/1c8QfrmdXHpvnc2jK5BD1WiJIxiMW95fMjK7Bw",
+        node.at("/signatures/example.org/ed25519:1").asText());
+
+    // verify new signature format
+    assertFalse(node.at("/signatures/USERID/ed25519:DEVICEID").isMissingNode());
+    assertEquals(
+        node.at("/signatures/example.org/ed25519:1").asText().length(),
+        node.at("/signatures/USERID/ed25519:DEVICEID").asText().length());
+
+    // verify new signature content
+    assertEquals(account.sign(jsonShort), node.at("/signatures/USERID/ed25519:DEVICEID").asText());
+
+    account.clear();
+  }
 
   @Test
   void testCanonicalizeJson() throws Exception {
