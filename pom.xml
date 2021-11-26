@@ -46,7 +46,7 @@
 
   <properties>
     <jna.version>5.10.0</jna.version>
-    <jackson.version>2.11.1</jackson.version>
+    <jackson.version>2.13.0</jackson.version>
 
     <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
     <checkstyle.version>9.1</checkstyle.version>
