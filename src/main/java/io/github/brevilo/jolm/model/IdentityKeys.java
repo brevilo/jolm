@@ -16,7 +16,7 @@
 
 package io.github.brevilo.jolm.model;
 
-/** Model class representing identity keys. */
+/** Model class representing identity/device keys. */
 public class IdentityKeys {
   private String curve25519;
   private String ed25519;
@@ -35,5 +35,13 @@ public class IdentityKeys {
 
   public void setEd25519(String ed25519) {
     this.ed25519 = ed25519;
+  }
+
+  public String identityKey() {
+    return getCurve25519();
+  }
+
+  public String fingerprintKey() {
+    return getEd25519();
   }
 }
