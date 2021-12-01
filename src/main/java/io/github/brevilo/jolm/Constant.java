@@ -16,6 +16,8 @@
 
 package io.github.brevilo.jolm;
 
+import io.github.brevilo.jolm.jna.OlmLibrary;
+
 /** Provider for various Matrix constants. */
 public class Constant {
   public static final String UTF8 = "UTF-8";
@@ -29,4 +31,7 @@ public class Constant {
 
   public static final String JSON_SIGNATURES = "signatures";
   public static final String JSON_UNSIGNED = "unsigned";
+
+  public static final long MESSAGE_TYPE_PRE_KEY = OlmLibrary.OLM_MESSAGE_TYPE_PRE_KEY;
+  public static final long MESSAGE_TYPE_MESSAGE = OlmLibrary.OLM_MESSAGE_TYPE_MESSAGE;
 }
