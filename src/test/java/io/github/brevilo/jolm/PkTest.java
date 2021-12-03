@@ -120,7 +120,7 @@ class PkTest {
     String signature = signing.sign(message);
 
     Utility utility = new Utility();
-    utility.ed25519_verify(key, message, signature);
+    utility.verifyEd25519(key, message, signature);
     utility.clear();
   }
 

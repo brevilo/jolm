@@ -60,11 +60,11 @@ class UtilityTest {
     assertFalse(signature.isEmpty());
 
     // good verification
-    utility.ed25519_verify(keys.getEd25519(), message, signature);
+    utility.verifyEd25519(keys.getEd25519(), message, signature);
 
     // bad key
     try {
-      utility.ed25519_verify(failString, message, signature);
+      utility.verifyEd25519(failString, message, signature);
     } catch (OlmException e) {
       String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
 
@@ -75,7 +75,7 @@ class UtilityTest {
 
     // bad message for signature
     try {
-      utility.ed25519_verify(keys.getEd25519(), "{}", signature);
+      utility.verifyEd25519(keys.getEd25519(), "{}", signature);
     } catch (OlmException e) {
       String expected =
           OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);
@@ -87,7 +87,7 @@ class UtilityTest {
 
     // bad signature format
     try {
-      utility.ed25519_verify(keys.getEd25519(), message, failString);
+      utility.verifyEd25519(keys.getEd25519(), message, failString);
     } catch (OlmException e) {
       String expected = OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_INVALID_BASE64);
 
@@ -98,7 +98,7 @@ class UtilityTest {
 
     // bad signature
     try {
-      utility.ed25519_verify(keys.getEd25519(), message, keys.getEd25519());
+      utility.verifyEd25519(keys.getEd25519(), message, keys.getEd25519());
     } catch (OlmException e) {
       String expected =
           OlmLibrary._olm_error_to_string(OlmLibrary.OlmErrorCode.OLM_BAD_MESSAGE_MAC);

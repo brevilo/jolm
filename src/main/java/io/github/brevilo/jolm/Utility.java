@@ -54,7 +54,7 @@ public class Utility {
    *     BAD_MESSAGE_MAC</code> if the signature was invalid
    * @throws JsonProcessingException (de)serialization error
    */
-  public void ed25519_verify(String key, String message, String signature)
+  public void verifyEd25519(String key, String message, String signature)
       throws OlmException, JsonProcessingException {
 
     ObjectNode node = (ObjectNode) objectMapper.readTree(message);
@@ -80,6 +80,12 @@ public class Utility {
             new NativeSize(signatureBuffer));
 
     checkOlmResult(result);
+  }
+
+  @Deprecated
+  public void ed25519_verify(String key, String message, String signature)
+      throws OlmException, JsonProcessingException {
+    verifyEd25519(key, message, signature);
   }
 
   /**
