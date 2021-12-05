@@ -101,7 +101,7 @@ public class Utils {
   public static String fromNative(Memory buffer) {
     // shorten to actual string length
     NativeSize size = new NativeSize(buffer.size());
-    Long stringEnd = new Long(buffer.indexOf(0, (byte) 0));
+    Long stringEnd = Long.valueOf(buffer.indexOf(0, (byte) 0));
     int length = stringEnd.intValue() < size.intValue() ? stringEnd.intValue() : size.intValue();
 
     try {
