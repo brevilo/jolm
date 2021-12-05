@@ -17,7 +17,7 @@
 package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.jna.Memory;
 import io.github.brevilo.jolm.Utils.OlmException;
@@ -31,7 +31,12 @@ public class Utility {
   // backing store
   private final OlmUtility instance;
 
-  private ObjectMapper objectMapper = new ObjectMapper();
+  private final JsonMapper jsonMapper;
+
+  // initializer
+  {
+    jsonMapper = JsonMapper.builder().build();
+  }
 
   /** Creates a new Utility object. */
   public Utility() {
@@ -57,7 +62,7 @@ public class Utility {
   public void verifyEd25519(String key, String message, String signature)
       throws OlmException, JsonProcessingException {
 
-    ObjectNode node = (ObjectNode) objectMapper.readTree(message);
+    ObjectNode node = (ObjectNode) jsonMapper.readTree(message);
 
     // strip nodes not to be verified
     node.remove(Constant.JSON_SIGNATURES);

@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -30,7 +30,7 @@ class UtilsTest {
 
   @Test
   void testSignJson() throws Exception {
-    final ObjectMapper objectMapper = new ObjectMapper();
+    final JsonMapper jsonMapper = JsonMapper.builder().build();
     final Account account = new Account();
     final String jsonShort =
         "{\"name\":\"example.org\",\"signing_keys\":{\"ed25519:1\":\"XSl0kuyvrXNj6A+7/tkrB9sxSbRi08Of5uRhxOqZtEQ\"}}";
@@ -55,7 +55,7 @@ class UtilsTest {
         Utils.signJson(account, jsonFull, "USERID", Constant.KEY_ED25519, "DEVICEID");
 
     // verify original content
-    JsonNode node = objectMapper.readTree(signedJson);
+    JsonNode node = jsonMapper.readTree(signedJson);
     assertEquals("example.org", node.at("/name").asText());
     assertEquals(
         "XSl0kuyvrXNj6A+7/tkrB9sxSbRi08Of5uRhxOqZtEQ", node.at("/signing_keys/ed25519:1").asText());

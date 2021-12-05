@@ -18,7 +18,6 @@ package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -245,8 +244,8 @@ public class Utils {
       throws OlmException, JsonProcessingException {
 
     // parse JSON string
-    ObjectMapper objectMapper = new ObjectMapper();
-    ObjectNode node = (ObjectNode) objectMapper.readTree(json);
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    ObjectNode node = (ObjectNode) jsonMapper.readTree(json);
 
     // strip nodes not to be signed
     JsonNode signaturesNode = node.remove(Constant.JSON_SIGNATURES);
@@ -257,9 +256,9 @@ public class Utils {
 
     // add signature node
     if (signaturesNode == null || signaturesNode.isNull()) {
-      signaturesNode = objectMapper.createObjectNode();
+      signaturesNode = jsonMapper.createObjectNode();
     }
-    ObjectNode keyNode = objectMapper.createObjectNode();
+    ObjectNode keyNode = jsonMapper.createObjectNode();
     keyNode.put(String.join(":", keyAlgorithm, deviceId), signature);
     ((ObjectNode) signaturesNode).set(userId, keyNode);
     node.set("signatures", signaturesNode);
@@ -303,8 +302,8 @@ public class Utils {
    * @throws JsonProcessingException (de)serialization error
    */
   public static String canonicalizeJson(String json) throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    JsonNode node = objectMapper.readTree(json);
+    JsonMapper jsonMapper = JsonMapper.builder().build();
+    JsonNode node = jsonMapper.readTree(json);
 
     return Utils.canonicalizeJson(node);
   }

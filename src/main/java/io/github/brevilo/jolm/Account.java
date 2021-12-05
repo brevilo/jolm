@@ -17,7 +17,7 @@
 package io.github.brevilo.jolm;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sun.jna.Memory;
 import io.github.brevilo.jolm.Utils.OlmException;
 import io.github.brevilo.jolm.jna.NativeSize;
@@ -32,7 +32,12 @@ public class Account {
   // backing store
   public final OlmAccount instance;
 
-  private final ObjectMapper objectMapper = new ObjectMapper();
+  private final JsonMapper jsonMapper;
+
+  // initializer
+  {
+    jsonMapper = JsonMapper.builder().build();
+  }
 
   /**
    * Creates a new account initialized with random data.
@@ -75,7 +80,7 @@ public class Account {
 
     checkOlmResult(result);
 
-    return objectMapper.readValue(Utils.fromNative(identityKeys), IdentityKeys.class);
+    return jsonMapper.readValue(Utils.fromNative(identityKeys), IdentityKeys.class);
   }
 
   /**
@@ -125,7 +130,7 @@ public class Account {
     NativeSize result = OlmLibrary.olm_account_one_time_keys(instance, oneTimeKeys, keysLength);
     checkOlmResult(result);
 
-    return objectMapper.readValue(Utils.fromNative(oneTimeKeys), OneTimeKeys.class);
+    return jsonMapper.readValue(Utils.fromNative(oneTimeKeys), OneTimeKeys.class);
   }
 
   /**
@@ -185,7 +190,7 @@ public class Account {
     NativeSize result = OlmLibrary.olm_account_fallback_key(instance, fallbackKey, keyLength);
     checkOlmResult(result);
 
-    return objectMapper.readValue(Utils.fromNative(fallbackKey), OneTimeKeys.class);
+    return jsonMapper.readValue(Utils.fromNative(fallbackKey), OneTimeKeys.class);
   }
 
   /**
