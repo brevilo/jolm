@@ -30,8 +30,12 @@ public class InboundGroupSession {
   // backing store
   private final OlmInboundGroupSession instance;
 
-  /** Private constructor. */
-  private InboundGroupSession() {
+  /**
+   * Creates a new inbound Megolm session. The session key must be imported by calling {@link
+   * #importer(String)} before using the session (e.g. when processing a <code>m.forwarded_room_key
+   * </code> event).
+   */
+  public InboundGroupSession() {
     // initialize backing store
     instance =
         Utils.initialize(
