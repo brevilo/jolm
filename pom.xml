@@ -49,6 +49,7 @@
     <jackson.version>2.13.0</jackson.version>
 
     <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
+    <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
     <checkstyle.version>9.2</checkstyle.version>
     <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
     <junit.jupiter.engine.version>5.8.2</junit.jupiter.engine.version>
@@ -115,6 +116,17 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven.compiler.plugin.version}</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint:deprecation</arg>
+          </compilerArgs>
+        </configuration>
       </plugin>
 
       <plugin>
