@@ -47,7 +47,7 @@ class UtilityTest {
   }
 
   @Test
-  void testEd25519Verify() throws Exception {
+  void testVerifyEd25519() throws Exception {
     final String failString = "SNAFU";
     final String message = Utils.canonicalizeJson("{ \"content\" : {} }");
 
