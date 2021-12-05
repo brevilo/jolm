@@ -32,7 +32,7 @@ public class InboundGroupSession {
 
   /**
    * Creates a new inbound Megolm session. The session key must be imported by calling {@link
-   * #importer(String)} before using the session (e.g. when processing a <code>m.forwarded_room_key
+   * #importKey(String)} before using the session (e.g. when processing a <code>m.forwarded_room_key
    * </code> event).
    */
   public InboundGroupSession() {
@@ -110,7 +110,7 @@ public class InboundGroupSession {
 
   /**
    * Export the base64-encoded ratchet key for this session, at the given index, in a format which
-   * can be used by {@link #importer(String)}.
+   * can be used by {@link #importKey(String)}.
    *
    * @param messageIndex index at which to export the session
    * @return session key at the given index
@@ -118,7 +118,7 @@ public class InboundGroupSession {
    *     OLM_UNKNOWN_MESSAGE_INDEX</code> if we do not have a session key corresponding to the given
    *     message index (ie, it was sent before the session key was shared with us)
    */
-  public String export(long messageIndex) throws OlmException {
+  public String exportKey(long messageIndex) throws OlmException {
     // prepare output buffer
     NativeSize sessionKeyLength = OlmLibrary.olm_export_inbound_group_session_length(instance);
     Memory sessionKeyBuffer = new Memory(sessionKeyLength.longValue());
@@ -133,14 +133,19 @@ public class InboundGroupSession {
     return Utils.fromNative(sessionKeyBuffer);
   }
 
+  @Deprecated
+  public String export(long messageIndex) throws OlmException {
+    return exportKey(messageIndex);
+  }
+
   /**
-   * Import an inbound group session, from a previous export via {@link #export(long)}.
+   * Import an inbound group session key, from a previous export via {@link #exportKey(long)}.
    *
    * @param sessionKey session key to start the new session from
    * @throws OlmException <code>OLM_INVALID_BASE64</code> if the session key is not valid base64;
    *     <code>OLM_BAD_SESSION_KEY</code> if the session key is invalid
    */
-  public void importer(String sessionKey) throws OlmException {
+  public void importKey(String sessionKey) throws OlmException {
     // get native key
     Memory sessionKeyBuffer = Utils.toNative(sessionKey);
 
@@ -150,6 +155,11 @@ public class InboundGroupSession {
             instance, sessionKeyBuffer, new NativeSize(sessionKeyBuffer));
 
     checkOlmResult(result);
+  }
+
+  @Deprecated
+  public void importer(String sessionKey) throws OlmException {
+    importKey(sessionKey);
   }
 
   /**

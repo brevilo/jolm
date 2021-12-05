@@ -172,13 +172,13 @@ class GroupSessionTest {
     assertEquals(0, message.getIndex());
 
     // export session
-    String sessionKey = bobInboundSession.export(0);
+    String sessionKey = bobInboundSession.exportKey(0);
     assertNotNull(sessionKey);
     assertFalse(sessionKey.isEmpty());
 
     // clear and re-import session
     bobInboundSession.clear();
-    bobInboundSession.importer(sessionKey);
+    bobInboundSession.importKey(sessionKey);
 
     // check imported session
     assertFalse(bobInboundSession.isVerified());
