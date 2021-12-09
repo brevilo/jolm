@@ -110,7 +110,7 @@ class AccountTest {
 
   @Test
   @Order(4)
-  void testMarkOneTimeKeysAsPublished() throws Exception {
+  void testMarkKeysAsPublished() throws Exception {
     assertEquals(4, account.oneTimeKeys().getCurve25519().size());
     assertEquals(1, account.unpublishedFallbackKey().getCurve25519().size());
 
