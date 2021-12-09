@@ -336,6 +336,14 @@ public class OlmLibrary implements Library {
   public static native NativeSize olm_account_fallback_key(
       PointerByReference account, Pointer fallback_key, NativeSize fallback_key_size);
 
+  public static native NativeSize olm_account_unpublished_fallback_key_length(
+      PointerByReference account);
+
+  public static native NativeSize olm_account_unpublished_fallback_key(
+      PointerByReference account, Pointer fallback_key, NativeSize fallback_key_size);
+
+  public static native void olm_account_forget_old_fallback_key(PointerByReference account);
+
   public static native NativeSize olm_create_outbound_session_random_length(
       PointerByReference session);
 
