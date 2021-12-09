@@ -147,14 +147,23 @@ public class Account {
   }
 
   /**
-   * Marks the current set of one time keys as being published.
+   * Marks the current set of one time keys and fallback key as being published.
+   *
+   * <p>Once marked as published, the one time keys will no longer be returned by {@link
+   * #oneTimeKeys()}, and the fallback key will no longer be returned by {@link
+   * #unpublishedFallbackKey()}.
    *
    * @throws OlmException unspecified
    */
-  public void markOneTimeKeysAsPublished() throws OlmException {
+  public void markKeysAsPublished() throws OlmException {
     // call olm
     NativeSize result = OlmLibrary.olm_account_mark_keys_as_published(instance);
     checkOlmResult(result);
+  }
+
+  @Deprecated
+  public void markOneTimeKeysAsPublished() throws OlmException {
+    markKeysAsPublished();
   }
 
   /**
@@ -181,6 +190,7 @@ public class Account {
    * @throws OlmException <code>OUTPUT_BUFFER_TOO_SMALL</code> if the key buffer was too small
    * @throws JsonProcessingException deserialization error
    */
+  @Deprecated
   public OneTimeKeys fallbackKey() throws OlmException, JsonProcessingException {
     // prepare output buffer
     NativeSize keyLength = OlmLibrary.olm_account_fallback_key_length(instance);
@@ -191,6 +201,38 @@ public class Account {
     checkOlmResult(result);
 
     return jsonMapper.readValue(Utils.fromNative(fallbackKey), OneTimeKeys.class);
+  }
+
+  /**
+   * Gets the fallback key for the account (if present and unpublished).
+   *
+   * @return fallback key
+   * @throws OlmException <code>OUTPUT_BUFFER_TOO_SMALL</code> if the key buffer was too small
+   * @throws JsonProcessingException deserialization error
+   */
+  public OneTimeKeys unpublishedFallbackKey() throws OlmException, JsonProcessingException {
+    // prepare output buffer
+    NativeSize keyLength = OlmLibrary.olm_account_unpublished_fallback_key_length(instance);
+    Memory fallbackKey = new Memory(keyLength.longValue());
+
+    // call olm
+    NativeSize result =
+        OlmLibrary.olm_account_unpublished_fallback_key(instance, fallbackKey, keyLength);
+    checkOlmResult(result);
+
+    return jsonMapper.readValue(Utils.fromNative(fallbackKey), OneTimeKeys.class);
+  }
+
+  /**
+   * Forget about the old fallback key.
+   *
+   * <p>This should be called once you are reasonably certain that you will not receive any more
+   * messages that use the old fallback key (e.g. 5 minutes after the new fallback key has been
+   * published).
+   */
+  public void forgetFallbackKey() {
+    // call olm
+    OlmLibrary.olm_account_forget_old_fallback_key(instance);
   }
 
   /**

@@ -111,8 +111,13 @@ class AccountTest {
   @Test
   @Order(4)
   void testMarkOneTimeKeysAsPublished() throws Exception {
-    account.markOneTimeKeysAsPublished();
+    assertEquals(4, account.oneTimeKeys().getCurve25519().size());
+    assertEquals(1, account.unpublishedFallbackKey().getCurve25519().size());
+
+    account.markKeysAsPublished();
+
     assertEquals(0, account.oneTimeKeys().getCurve25519().size());
+    assertEquals(0, account.unpublishedFallbackKey().getCurve25519().size());
   }
 
   @Test
@@ -130,13 +135,25 @@ class AccountTest {
 
   @Test
   @Order(2)
-  void testFallbackKey() throws Exception {
-    OneTimeKeys key = account.fallbackKey();
+  void testUnpublishedFallbackKey() throws Exception {
+    OneTimeKeys key = account.unpublishedFallbackKey();
     assertNotNull(key);
 
     assertNotNull(key.getCurve25519());
     assertFalse(key.getCurve25519().isEmpty());
     assertEquals(1, key.getCurve25519().size());
+  }
+
+  @Test
+  @Order(3)
+  void testforgetFallbackKey() throws Exception {
+    assertEquals(1, account.unpublishedFallbackKey().getCurve25519().size());
+
+    account.forgetFallbackKey();
+    assertEquals(1, account.unpublishedFallbackKey().getCurve25519().size());
+
+    account.generateFallbackKey();
+    assertEquals(1, account.unpublishedFallbackKey().getCurve25519().size());
   }
 
   @Test
@@ -158,7 +175,8 @@ class AccountTest {
     assertEquals(
         baseline.oneTimeKeys().getCurve25519(), deserialized.oneTimeKeys().getCurve25519());
     assertEquals(
-        baseline.fallbackKey().getCurve25519(), deserialized.fallbackKey().getCurve25519());
+        baseline.unpublishedFallbackKey().getCurve25519(),
+        deserialized.unpublishedFallbackKey().getCurve25519());
 
     deserialized.clear();
     baseline.clear();
