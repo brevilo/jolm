@@ -69,14 +69,15 @@ public class Session {
 
   /**
    * Returns a description of the internal state of this session (debugging and logging purposes).
+   * If the buffer is not large enough to hold the entire string, it will be truncated and will end
+   * with "...". A buffer length of 600 will be enough to hold any output. The required minimum
+   * buffer length is 23.
    *
    * @param size maximum size allowed for the returned description
    * @return session description
    */
   public String describe(long size) {
-    // note the API doesn't specify the required size but uses the buffer until it's exhausted:
-    // https://gitlab.matrix.org/matrix-org/olm/-/blob/d84c1af8821819be965d26ce559279eff7fffb61/src/session.cpp#L401
-    // let's deviate from the API and let the caller decide
+    // prepare output buffer
     NativeSize bufferSize = new NativeSize(size);
     Memory buffer = new Memory(size);
 
