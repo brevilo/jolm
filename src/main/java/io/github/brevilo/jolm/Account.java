@@ -54,6 +54,10 @@ public class Account {
 
     // call olm
     NativeSize result = OlmLibrary.olm_create_account(instance, randomBuffer, randomLength);
+
+    // clear the random buffer
+    randomBuffer.clear();
+
     checkOlmResult(result);
   }
 
@@ -110,6 +114,9 @@ public class Account {
     NativeSize result =
         OlmLibrary.olm_account_generate_one_time_keys(
             instance, new NativeSize(numberOfKeys), randomBuffer, randomLength);
+
+    // clear the random buffer
+    randomBuffer.clear();
 
     checkOlmResult(result);
   }
@@ -179,6 +186,9 @@ public class Account {
     // call olm
     NativeSize result =
         OlmLibrary.olm_account_generate_fallback_key(instance, randomBuffer, randomLength);
+
+    // clear the random buffer
+    randomBuffer.clear();
 
     checkOlmResult(result);
   }

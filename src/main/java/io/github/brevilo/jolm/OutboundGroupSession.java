@@ -47,6 +47,9 @@ public class OutboundGroupSession {
     NativeSize result =
         OlmLibrary.olm_init_outbound_group_session(instance, randomBuffer, randomLength);
 
+    // clear the random buffer
+    randomBuffer.clear();
+
     checkOlmResult(result);
   }
 

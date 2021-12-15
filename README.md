@@ -8,9 +8,9 @@ jOlm provides Java bindings to the C-API of the [Olm cryptographic library](http
 ## Requirements
 
 * Java SE 1.8
-* Olm 3.2.7 or higher
+* Olm 3.2.8 or higher
 
-jOlm uses Java Native Access (JNA) and currently requires Olm 3.2 (or higher) to be installed. How to get Olm:
+jOlm uses Java Native Access (JNA) and currently requires Olm to be installed. How to get Olm:
 
 * Use your favorite package manager to install it (Linux, [macOS](https://brew.sh/))
 * Download the [latest version](https://gitlab.matrix.org/matrix-org/olm/-/releases) and [build it](https://gitlab.matrix.org/matrix-org/olm#building) yourself

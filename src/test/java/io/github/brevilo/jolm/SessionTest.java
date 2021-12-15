@@ -138,11 +138,20 @@ class SessionTest {
   @Test
   @Order(2)
   void testDescribe() throws Exception {
-    final long LENGTH = 128;
-    String description = aliceSession.describe(LENGTH);
+    // big enough buffer
+    final long FULLLENGTH = 600;
+    String description = aliceSession.describe(FULLLENGTH);
 
     assertNotNull(description);
-    assertTrue(description.length() <= LENGTH);
+    assertTrue(description.length() <= FULLLENGTH);
+
+    // too small a buffer
+    final long MINLENGTH = 23;
+    description = aliceSession.describe(MINLENGTH);
+
+    assertNotNull(description);
+    assertTrue(description.length() == MINLENGTH - 1);
+    assertEquals("...", description.substring(Math.max(0, description.length() - 3)));
   }
 
   @Test

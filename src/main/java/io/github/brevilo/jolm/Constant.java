@@ -22,7 +22,7 @@ import io.github.brevilo.jolm.jna.OlmLibrary;
 public class Constant {
   public static final byte MIN_OLM_VERSION_MAJOR = 3;
   public static final byte MIN_OLM_VERSION_MINOR = 2;
-  public static final byte MIN_OLM_VERSION_PATCH = 7;
+  public static final byte MIN_OLM_VERSION_PATCH = 8;
 
   public static final String UTF8 = "UTF-8";
 
