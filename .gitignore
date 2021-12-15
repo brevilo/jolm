@@ -1,4 +1,5 @@
 # files
+.checkstyle
 .classpath
 .project
 pom.xml.*
