@@ -39,7 +39,6 @@ Using maven: `mvn install`
 - [x] Implement test suite
 - [ ] Security audit
 - [ ] Memory management audit
-- [ ] Consider Gradle to integrate Olm
 
 ## Contribute
 
