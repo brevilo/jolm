@@ -84,6 +84,9 @@ public class Utility {
             signatureBuffer,
             new NativeSize(signatureBuffer));
 
+    // clear the input buffer
+    messageBuffer.clear();
+
     checkOlmResult(result);
   }
 
@@ -112,6 +115,9 @@ public class Utility {
     NativeSize result =
         OlmLibrary.olm_sha256(
             instance, inputBuffer, new NativeSize(inputBuffer), outputBuffer, outputLength);
+
+    // clear the input buffer
+    inputBuffer.clear();
 
     checkOlmResult(result);
 

@@ -187,6 +187,9 @@ public class Utils {
     NativeSize result =
         pickle.apply(instance, keyBuffer, new NativeSize(keyBuffer), pickled, pickledLength);
 
+    // clear the key buffer
+    keyBuffer.clear();
+
     checkOlmResult.accept(result);
 
     // return pickled olm instance
@@ -222,6 +225,9 @@ public class Utils {
             new NativeSize(keyBuffer),
             pickledBuffer,
             new NativeSize(pickledBuffer));
+
+    // clear the key buffer
+    keyBuffer.clear();
 
     checkOlmResult.accept(instance, result);
   }

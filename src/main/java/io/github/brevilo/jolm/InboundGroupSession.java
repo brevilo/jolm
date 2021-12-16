@@ -62,6 +62,9 @@ public class InboundGroupSession {
         OlmLibrary.olm_init_inbound_group_session(
             instance, sessionKeyBuffer, new NativeSize(sessionKeyBuffer));
 
+    // clear the key buffer
+    sessionKeyBuffer.clear();
+
     checkOlmResult(result);
   }
 
@@ -128,9 +131,13 @@ public class InboundGroupSession {
         OlmLibrary.olm_export_inbound_group_session(
             instance, sessionKeyBuffer, sessionKeyLength, (int) messageIndex);
 
+    // clear the key buffer
+    String sessionKey = Utils.fromNative(sessionKeyBuffer);
+    sessionKeyBuffer.clear();
+
     checkOlmResult(result);
 
-    return Utils.fromNative(sessionKeyBuffer);
+    return sessionKey;
   }
 
   @Deprecated
@@ -153,6 +160,9 @@ public class InboundGroupSession {
     NativeSize result =
         OlmLibrary.olm_import_inbound_group_session(
             instance, sessionKeyBuffer, new NativeSize(sessionKeyBuffer));
+
+    // clear the key buffer
+    sessionKeyBuffer.clear();
 
     checkOlmResult(result);
   }
@@ -201,9 +211,13 @@ public class InboundGroupSession {
             maxPlainTextLength,
             messageIndex);
 
+    // clear the plaintext buffer
+    String plainText = Utils.fromNative(plainTextBuffer);
+    plainTextBuffer.clear();
+
     checkOlmResult(plainTextLength);
 
-    return new GroupMessage(Utils.fromNative(plainTextBuffer), messageIndex.getValue());
+    return new GroupMessage(plainText, messageIndex.getValue());
   }
 
   /**

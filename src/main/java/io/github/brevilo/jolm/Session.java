@@ -181,6 +181,12 @@ public class Session {
             messageBuffer,
             messageLength);
 
+    // clear the plaintext and random buffers
+    plainTextBuffer.clear();
+    if (randomBuffer != null) {
+      randomBuffer.clear();
+    }
+
     checkOlmResult(result);
 
     return Message.get(Utils.fromNative(messageBuffer), messageType.longValue());
@@ -226,9 +232,13 @@ public class Session {
             plainTextBuffer,
             maxPlainTextLength);
 
+    // clear the plaintext buffer
+    String plainText = Utils.fromNative(plainTextBuffer);
+    plainTextBuffer.clear();
+
     checkOlmResult(plainTextLength);
 
-    return Utils.fromNative(plainTextBuffer);
+    return plainText;
   }
 
   /**
@@ -316,6 +326,9 @@ public class Session {
             randomBuffer,
             randomLength);
 
+    // clear the random buffer
+    randomBuffer.clear();
+
     checkOlmResult(session.instance, result);
 
     return session;
@@ -349,6 +362,9 @@ public class Session {
             account.instance,
             oneTimeKeyMessageBuffer,
             new NativeSize(oneTimeKeyMessageBuffer));
+
+    // clear the message buffer
+    oneTimeKeyMessageBuffer.clear();
 
     checkOlmResult(session.instance, result);
 
@@ -387,6 +403,9 @@ public class Session {
             new NativeSize(identityKeyBuffer),
             oneTimeKeyMessageBuffer,
             new NativeSize(oneTimeKeyMessageBuffer));
+
+    // clear the message buffer
+    oneTimeKeyMessageBuffer.clear();
 
     checkOlmResult(session.instance, result);
 

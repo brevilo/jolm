@@ -100,9 +100,14 @@ public class OutboundGroupSession {
 
     // call olm
     NativeSize result = OlmLibrary.olm_outbound_group_session_key(instance, key, keyLength);
+
+    // clear the key buffer
+    String sessionKey = Utils.fromNative(key);
+    key.clear();
+
     checkOlmResult(result);
 
-    return Utils.fromNative(key);
+    return sessionKey;
   }
 
   /**
@@ -129,6 +134,9 @@ public class OutboundGroupSession {
             new NativeSize(plainTextBuffer),
             messageBuffer,
             messageLength);
+
+    // clear the plaintext buffer
+    plainTextBuffer.clear();
 
     checkOlmResult(result);
 

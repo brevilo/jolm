@@ -43,6 +43,10 @@ public class Sas {
 
     // call olm
     NativeSize result = OlmLibrary.olm_create_sas(instance, randomBuffer, randomLength);
+
+    // clear the random buffer
+    randomBuffer.clear();
+
     checkOlmResult(result);
   }
 

@@ -67,6 +67,9 @@ public class PkSigning {
         OlmLibrary.olm_pk_signing_key_from_seed(
             instance, publicKeyBuffer, publicKeyLength, seedBuffer, new NativeSize(seedBuffer));
 
+    // clear the seed buffer
+    seedBuffer.clear();
+
     checkOlmResult(result);
 
     // store associated public key
@@ -111,6 +114,9 @@ public class PkSigning {
             new NativeSize(messageBuffer),
             signatureBuffer,
             signatureLength);
+
+    // clear the message buffer
+    messageBuffer.clear();
 
     checkOlmResult(result);
 

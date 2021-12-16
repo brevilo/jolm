@@ -54,6 +54,9 @@ public class PkDecryption {
         OlmLibrary.olm_pk_key_from_private(
             instance, publicKeyBuffer, publicKeyLength, privateKeyBuffer, privateKeyLength);
 
+    // clear the random private key buffer
+    privateKeyBuffer.clear();
+
     checkOlmResult(result);
 
     // store associated public key
@@ -91,9 +94,13 @@ public class PkDecryption {
     NativeSize result =
         OlmLibrary.olm_pk_get_private_key(instance, privateKeyBuffer, privateKeyLength);
 
+    // clear the private key buffer
+    String privateKey = Utils.fromNative(privateKeyBuffer);
+    privateKeyBuffer.clear();
+
     checkOlmResult(result);
 
-    return Utils.fromNative(privateKeyBuffer);
+    return privateKey;
   }
 
   /**
@@ -127,9 +134,13 @@ public class PkDecryption {
             plainTextBuffer,
             plainTextLength);
 
+    // clear the plaintext buffer
+    String plainText = Utils.fromNative(plainTextBuffer);
+    plainTextBuffer.clear();
+
     checkOlmResult(result);
 
-    return Utils.fromNative(plainTextBuffer);
+    return plainText;
   }
 
   /**

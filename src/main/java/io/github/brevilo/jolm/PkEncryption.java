@@ -98,6 +98,10 @@ public class PkEncryption {
             randomBuffer,
             randomLength);
 
+    // clear the plaintext and random buffers
+    plainTextBuffer.clear();
+    randomBuffer.clear();
+
     checkOlmResult(result);
 
     return new PkMessage(

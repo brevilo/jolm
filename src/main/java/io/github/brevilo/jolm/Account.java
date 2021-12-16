@@ -269,6 +269,9 @@ public class Account {
             signatureBuffer,
             signatureLength);
 
+    // clear the message buffer
+    messageBuffer.clear();
+
     checkOlmResult(result);
 
     return Utils.fromNative(signatureBuffer);
