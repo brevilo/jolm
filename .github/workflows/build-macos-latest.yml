@@ -1,4 +1,4 @@
-name: 'Build macOS'
+name: 'Build & Verify (macOS)'
 
 on: [push, pull_request]
 

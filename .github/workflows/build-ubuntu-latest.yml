@@ -1,4 +1,4 @@
-name: 'Build Linux'
+name: 'Build & Verify (Linux)'
 
 on: [push, pull_request]
 
