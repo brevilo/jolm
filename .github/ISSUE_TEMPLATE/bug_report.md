@@ -22,7 +22,7 @@ A clear and concise description of what you expected to happen.
  - OS: [e.g. Linux]
  - Java version: [e.g. OpenJDK 8]
  - libolm version [e.g. 3.2.8]
- - jOlm version [e.g. 1.0.0]
+ - jOlm version [e.g. 1.1.0]
 
 **Additional context**
 Add any other context about the problem here.

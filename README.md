@@ -21,7 +21,7 @@ jOlm uses Java Native Access (JNA) and currently requires Olm to be installed. H
 <dependency>
   <groupId>io.github.brevilo</groupId>
   <artifactId>jolm</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
