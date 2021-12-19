@@ -4,7 +4,7 @@
 
   <groupId>io.github.brevilo</groupId>
   <artifactId>jolm</artifactId>
-  <version>1.0.11-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>jOlm</name>
