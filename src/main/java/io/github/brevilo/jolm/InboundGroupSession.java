@@ -140,11 +140,6 @@ public class InboundGroupSession {
     return sessionKey;
   }
 
-  @Deprecated
-  public String export(long messageIndex) throws OlmException {
-    return exportKey(messageIndex);
-  }
-
   /**
    * Import an inbound group session key, from a previous export via {@link #exportKey(long)}.
    *
@@ -165,11 +160,6 @@ public class InboundGroupSession {
     sessionKeyBuffer.clear();
 
     checkOlmResult(result);
-  }
-
-  @Deprecated
-  public void importer(String sessionKey) throws OlmException {
-    importKey(sessionKey);
   }
 
   /**

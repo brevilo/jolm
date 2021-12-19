@@ -90,12 +90,6 @@ public class Utility {
     checkOlmResult(result);
   }
 
-  @Deprecated
-  public void ed25519_verify(String key, String message, String signature)
-      throws OlmException, JsonProcessingException {
-    verifyEd25519(key, message, signature);
-  }
-
   /**
    * Calculates the SHA-256 hash of the input and encodes it as base64.
    *
