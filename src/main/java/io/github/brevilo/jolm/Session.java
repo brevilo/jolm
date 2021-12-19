@@ -156,7 +156,7 @@ public class Session {
    */
   public Message encrypt(String plainText) throws OlmException {
     // determine message type
-    NativeSize messageType = OlmLibrary.olm_encrypt_message_type(instance);
+    final NativeSize messageType = OlmLibrary.olm_encrypt_message_type(instance);
 
     // get native plain text
     Memory plainTextBuffer = Utils.toNative(plainText);
