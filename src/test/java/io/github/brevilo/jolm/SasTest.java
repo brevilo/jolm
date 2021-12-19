@@ -91,13 +91,5 @@ class SasTest {
     String bobBase64Mac = bobSas.calculateMacFixedBase64(message, macInfo);
 
     assertEquals(aliceBase64Mac, bobBase64Mac);
-
-    // get obsolete MACs (for completeness, until removed)
-    @SuppressWarnings("deprecation")
-    String aliceLongKdfMac = aliceSas.calculateMacLongKdf(message, macInfo);
-    @SuppressWarnings("deprecation")
-    String bobLongKdfMac = bobSas.calculateMacLongKdf(message, macInfo);
-
-    assertEquals(aliceLongKdfMac, bobLongKdfMac);
   }
 }

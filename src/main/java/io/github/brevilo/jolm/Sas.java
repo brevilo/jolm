@@ -202,41 +202,6 @@ public class Sas {
   }
 
   /**
-   * Generate a message authentication code (MAC) based on the shared secret. The other public key
-   * needs to be set for this method to work. For compatibility with an old version of Riot.
-   *
-   * @param message message to produce the authentication code for
-   * @param info extra information to mix in when generating the MAC, as per the Matrix spec
-   * @return message authentication code
-   * @throws OlmException <code>OUTPUT_BUFFER_TOO_SMALL</code> if the MAC buffer is too small
-   */
-  @Deprecated
-  public String calculateMacLongKdf(String message, String info) throws OlmException {
-    // get native message and info
-    Memory messageBuffer = Utils.toNative(message);
-    Memory infoBuffer = Utils.toNative(info);
-
-    // prepare output buffer
-    NativeSize macLength = OlmLibrary.olm_sas_mac_length(instance);
-    Memory macBuffer = new Memory(macLength.longValue());
-
-    // call olm
-    NativeSize result =
-        OlmLibrary.olm_sas_calculate_mac_long_kdf(
-            instance,
-            messageBuffer,
-            new NativeSize(messageBuffer),
-            infoBuffer,
-            new NativeSize(infoBuffer),
-            macBuffer,
-            macLength);
-
-    checkOlmResult(result);
-
-    return Utils.fromNative(macBuffer);
-  }
-
-  /**
    * Check the latest olm function call for errors.
    *
    * @param result result returned by the olm function call to check

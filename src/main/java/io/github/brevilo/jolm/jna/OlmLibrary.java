@@ -331,11 +331,6 @@ public class OlmLibrary implements Library {
   public static native NativeSize olm_account_generate_fallback_key(
       PointerByReference account, Pointer random, NativeSize random_length);
 
-  public static native NativeSize olm_account_fallback_key_length(PointerByReference account);
-
-  public static native NativeSize olm_account_fallback_key(
-      PointerByReference account, Pointer fallback_key, NativeSize fallback_key_size);
-
   public static native NativeSize olm_account_unpublished_fallback_key_length(
       PointerByReference account);
 
@@ -633,14 +628,4 @@ public class OlmLibrary implements Library {
       NativeSize info_length,
       Pointer mac,
       NativeSize mac_length);
-
-  public static native NativeSize olm_sas_calculate_mac_long_kdf(
-      PointerByReference sas,
-      Pointer input,
-      NativeSize input_length,
-      Pointer info,
-      NativeSize info_length,
-      Pointer mac,
-      NativeSize mac_length);
-  ;
 }

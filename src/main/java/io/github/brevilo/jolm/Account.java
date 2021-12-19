@@ -168,11 +168,6 @@ public class Account {
     checkOlmResult(result);
   }
 
-  @Deprecated
-  public void markOneTimeKeysAsPublished() throws OlmException {
-    markKeysAsPublished();
-  }
-
   /**
    * Generates a new fallback key. Only one previous fallback key is stored.
    *
@@ -191,26 +186,6 @@ public class Account {
     randomBuffer.clear();
 
     checkOlmResult(result);
-  }
-
-  /**
-   * Gets the fallback key for the account.
-   *
-   * @return fallback key
-   * @throws OlmException <code>OUTPUT_BUFFER_TOO_SMALL</code> if the key buffer was too small
-   * @throws JsonProcessingException deserialization error
-   */
-  @Deprecated
-  public OneTimeKeys fallbackKey() throws OlmException, JsonProcessingException {
-    // prepare output buffer
-    NativeSize keyLength = OlmLibrary.olm_account_fallback_key_length(instance);
-    Memory fallbackKey = new Memory(keyLength.longValue());
-
-    // call olm
-    NativeSize result = OlmLibrary.olm_account_fallback_key(instance, fallbackKey, keyLength);
-    checkOlmResult(result);
-
-    return jsonMapper.readValue(Utils.fromNative(fallbackKey), OneTimeKeys.class);
   }
 
   /**
