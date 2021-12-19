@@ -27,7 +27,7 @@ jobs:
         run: |
           cd  olm-${OLM_VERSION}
           cmake -DCMAKE_INSTALL_PREFIX=/usr/local . -Bbuild
-          cmake --build build
+          cmake --build build --target olm
           cmake --install build
           cd ..
 

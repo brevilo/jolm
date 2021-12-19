@@ -27,7 +27,7 @@ jobs:
         run: |
           cd  olm-${OLM_VERSION}
           cmake -S . -A x64 -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build
+          cmake --build build --target olm
           cd ..
           mkdir -p target/classes
           cp olm-${OLM_VERSION}/build/Debug/olm.dll target/classes
