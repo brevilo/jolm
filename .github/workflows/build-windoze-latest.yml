@@ -26,11 +26,11 @@ jobs:
       - name: 'Build and install Olm'
         run: |
           cd  olm-${OLM_VERSION}
-          cmake -S . -A x64 -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --target olm
+          cmake -S . -A x64 -B build
+          cmake --build build --config Release --target olm
           cd ..
           mkdir -p target/classes
-          cp olm-${OLM_VERSION}/build/Debug/olm.dll target/classes
+          cp olm-${OLM_VERSION}/build/Release/olm.dll target/classes
 
       - name: 'Set up JDK 11'
         uses: actions/setup-java@v2
