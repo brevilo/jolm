@@ -55,7 +55,7 @@
     <junit.jupiter.engine.version>5.8.2</junit.jupiter.engine.version>
     <spotless.version>2.19.1</spotless.version>
     <nexus.staging.maven.plugin.version>1.6.8</nexus.staging.maven.plugin.version>
-    <maven.release.plugin.version>3.0.0-M4</maven.release.plugin.version>
+    <maven.release.plugin.version>3.0.0-M5</maven.release.plugin.version>
     <maven.source.plugin.version>3.2.1</maven.source.plugin.version>
     <maven.javadoc.plugin.version>3.3.1</maven.javadoc.plugin.version>
     <maven.gpg.plugin.version>3.0.1</maven.gpg.plugin.version>
