@@ -10,7 +10,7 @@ jobs:
       run:
         shell: bash
     env:
-      OLM_VERSION: 3.2.8
+      OLM_VERSION: 3.2.10
 
     steps:
       - name: 'Clone repository'
