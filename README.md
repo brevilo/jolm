@@ -31,14 +31,10 @@ Using maven: `mvn install`
 
 ## Status
 
-- [x] Implement upstream API
-- [x] Preliminary documentation (Javadoc)
-- [x] Run basic tests
-- [x] Set up CI and release process
-- [x] Provide packages for Maven
-- [x] Implement test suite
-- [ ] Security audit
-- [ ] Memory management audit
+- Maturity: **stable**
+- Open TODOs:
+  - [ ] Security audit
+  - [ ] Memory management audit
 
 ## Contribute
 
