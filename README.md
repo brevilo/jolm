@@ -21,7 +21,7 @@ jOlm uses Java Native Access (JNA) and currently requires Olm to be installed. H
 <dependency>
   <groupId>io.github.brevilo</groupId>
   <artifactId>jolm</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
@@ -31,11 +31,9 @@ Using maven: `mvn install`
 
 ## Status
 
-- Maturity: **stable**
+**Important**: upstream `libolm` is being superseded by [vodozemac](https://github.com/matrix-org/vodozemac) (alongside [matrix-sdk-crypto](https://github.com/matrix-org/matrix-rust-sdk/tree/main/crates/matrix-sdk-crypto)). Consequently, all developers are [encouraged](https://matrix.org/blog/2022/05/16/independent-public-audit-of-vodozemac-a-native-rust-reference-implementation-of-matrix-end-to-end-encryption) to start migrating away from `libolm`. Thus the development of jOlm will be put on hiatus, with release [v1.1.1](https://github.com/brevilo/jolm/releases/tag/1.1.1) marking its final release for the time being.
+
+- Maturity: **stable** / inactive
 - Open TODOs:
   - [ ] Security audit
   - [ ] Memory management audit
-
-## Contribute
-
-PRs welcome 👍
